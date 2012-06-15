@@ -37,7 +37,7 @@ module MapKit
 
       # determine the scale value from the zoom level
       zoom_exponent = 20 - zoom_level
-      zoom_scale = 2^zoom_exponent
+      zoom_scale = 2 ** zoom_exponent
 
       # scale the map’s size in pixel space
       map_size_in_pixels = map_view.bounds.size
@@ -76,91 +76,84 @@ module MapKit
       self.setRegion(region, animated: animated)
     end
 
-=begin
--(void)setMapLat:(CGFloat)latitude
-             lon:(CGFloat)longitude
-            zoom:(CGFloat)zoom
-        animated:(BOOL)animated
-{
-    CLLocationCoordinate2D c;
-    c.latitude =  latitude;
-    c.longitude = longitude;
-    [self setCenterCoordinate:c zoomLevel:zoom animated:animated];
-}
+    def set_map_lat(latitude, longitude, zoom, animated)
+      c = CLLocationCoordinate2DMake(0, 0)
+      c.latitude = latitude
+      c.longitude = longitude
+      self.setCenterCoordinate(c, zoomLevel: zoom, animated: animated)
+    end
 
-//KMapView cannot display tiles that cross the pole (as these would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do).
--(MKCoordinateRegion)coordinateRegionWithMapView:(MKMapView *)mapView
-                                centerCoordinate:(CLLocationCoordinate2D)centerCoordinate
-                                    andZoomLevel:(NSUInteger)zoomLevel
-{
-  // clamp lat/long values to appropriate ranges
-  centerCoordinate.latitude = MIN(MAX(-90.0, centerCoordinate.latitude), 90.0);
-  centerCoordinate.longitude = fmod(centerCoordinate.longitude, 180.0);
 
-  // convert center coordiate to pixel space
-  double centerPixelX = [MKMapView longitudeToPixelSpaceX:centerCoordinate.longitude];
-  double centerPixelY = [MKMapView latitudeToPixelSpaceY:centerCoordinate.latitude];
+    # KMapView cannot display tiles that cross the pole
+    # This would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do.
+    def coordinate_region_with_map_view(map_view, center_coordinate, zoom_level)
 
-  // determine the scale value from the zoom level
-  NSInteger zoomExponent = 20 - zoomLevel;
-  double zoomScale = pow(2, zoomExponent);
+      # clamp lat/long values to appropriate ranges
+      center_coordinate.latitude = min(max(-90.0, center_coordinate.latitude), 90.0)
+      center_coordinate.longitude = center_coordinate.longitude % 180.0
 
-  // scale the map’s size in pixel space
-  CGSize mapSizeInPixels = mapView.bounds.size;
-  double scaledMapWidth = mapSizeInPixels.width * zoomScale;
-  double scaledMapHeight = mapSizeInPixels.height * zoomScale;
+      # convert center coordiate to pixel space
+      center_pixel_x = self.class.longitude_to_pixel_space_x(center_coordinate.longitude)
+      center_pixel_y = self.class.latitude_to_pixel_space_y(center_coordinate.latitude)
 
-  // figure out the position of the left pixel
-  double topLeftPixelX = centerPixelX - (scaledMapWidth / 2);
+      # determine the scale value from the zoom level
+      zoom_exponent = 20 - zoom_level
+      zoom_scale = 2 ** zoom_exponent
 
-  // find delta between left and right longitudes
-  CLLocationDegrees minLng = [MKMapView pixelSpaceXToLongitude:topLeftPixelX];
-  CLLocationDegrees maxLng = [MKMapView pixelSpaceXToLongitude:topLeftPixelX + scaledMapWidth];
-  CLLocationDegrees longitudeDelta = maxLng - minLng;
+      # scale the map’s size in pixel space
+      map_size_in_pixels = map_view.bounds.size
+      scaled_map_width = map_size_in_pixels.width * zoom_scale
+      scaled_map_height = map_size_in_pixels.height * zoom_scale
 
-  // if we’re at a pole then calculate the distance from the pole towards the equator
-  // as MKMapView doesn’t like drawing boxes over the poles
-  double topPixelY = centerPixelY - (scaledMapHeight / 2);
-  double bottomPixelY = centerPixelY + (scaledMapHeight / 2);
-  BOOL adjustedCenterPoint = NO;
-  if (topPixelY > MERCATOR_OFFSET * 2) {
-    topPixelY = centerPixelY - scaledMapHeight;
-    bottomPixelY = MERCATOR_OFFSET * 2;
-    adjustedCenterPoint = YES;
-  }
+      # figure out the position of the left pixel
+      top_left_pixel_x = center_pixel_x - (scaled_map_width / 2)
 
-  // find delta between top and bottom latitudes
-  CLLocationDegrees minLat = [MKMapView pixelSpaceYToLatitude:topPixelY];
-  CLLocationDegrees maxLat = [MKMapView pixelSpaceYToLatitude:bottomPixelY];
-  CLLocationDegrees latitudeDelta = -1 * (maxLat - minLat);
+      # find delta between left and right longitudes
+      min_lng = self.class.pixel_space_x_to_longitude(top_left_pixel_x)
+      max_lng = self.class.pixel_space_x_to_longitude(top_left_pixel_x + scaled_map_width)
+      longitude_delta = max_lng - min_lng
 
-  // create and return the lat/lng span
-  MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
-  MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
-  // once again, MKMapView doesn’t like drawing boxes over the poles
-  // so adjust the center coordinate to the center of the resulting region
-  if (adjustedCenterPoint) {
-    region.center.latitude = [MKMapView pixelSpaceYToLatitude:((bottomPixelY + topPixelY) / 2.0)];
-  }
+      # if we’re at a pole then calculate the distance from the pole towards the equator
+      # as MKMapView doesn’t like drawing boxes over the poles
+      top_pixel_y = center_pixel_y - (scaled_map_height / 2)
+      bottom_pixel_y = center_pixel_y + (scaled_map_height / 2)
+      adjusted_center_point = false
+      if top_pixel_y > MERCATOR_OFFSET * 2
+        top_pixel_y = center_pixel_y - scaled_map_height
+        bottom_pixel_y = MERCATOR_OFFSET * 2
+        adjusted_center_point = true
+      end
 
-  return region;
-}
+      # find delta between top and bottom latitudes
+      min_lat = self.class.pixel_space_y_to_latitude(top_pixel_y)
+      max_lat = self.class.pixel_space_y_to_latitude(bottom_pixel_y)
+      latitude_delta = -1 * (max_lat - min_lat)
 
-- (NSUInteger) zoomLevel {
-    MKCoordinateRegion region = self.region;
+      # create and return the lat/lng span
+      span = MKCoordinateSpanMake(latitude_delta, longitude_delta)
+      region = MKCoordinateRegionMake(center_coordinate, span)
+      # once again, MKMapView doesn’t like drawing boxes over the poles
+      # so adjust the center coordinate to the center of the resulting region
+      if adjusted_center_point
+        region.center.latitude = self.class.pixel_space_y_to_latitude((bottom_pixel_y + top_pixel_y) / 2.0)
+      end
 
-    double centerPixelX = [MKMapView longitudeToPixelSpaceX: region.center.longitude];
-    double topLeftPixelX = [MKMapView longitudeToPixelSpaceX: region.center.longitude - region.span.longitudeDelta / 2];
+      region
+    end
 
-    double scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
-    CGSize mapSizeInPixels = self.bounds.size;
-    double zoomScale = scaledMapWidth / mapSizeInPixels.width;
-    double zoomExponent = log(zoomScale) / log(2);
-    double zoomLevel = 20 - zoomExponent;
+    def zoom_level
+      region = self.region
 
-    return zoomLevel;
-}
-=end
+      center_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude)
+      top_left_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude - region.span.longitudeDelta / 2)
+
+      scaled_map_width = (center_pixel_x - top_left_pixel_x) * 2
+      map_size_in_pixels = self.bounds.size
+      zoom_scale = scaled_map_width / map_size_in_pixels.width
+      zoom_exponent = log(zoom_scale) / log(2)
+      zoom_level = 20 - zoom_exponent
+      zoom_level
+    end
 
   end
 end
