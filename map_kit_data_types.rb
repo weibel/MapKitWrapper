@@ -121,13 +121,19 @@ module MapKit
     class MapRect
       attr_reader :sdk
 
-      # MapRect.new([10,12], [2,4])
+      # MapRect.new(x, y, width, height)
+      # MapRect.new([x, y], [width, height])
       # MapRect.new(MapPoint, MapSize)
       # MapRect.new(MKMapPoint, MKMapSize)
-      def initialize(origin, size)
-        origin = MapPoint.new(origin) if !origin.is_a?(MapPoint)
-        size = MapSize.new(size) if !size.is_a?(MapSize)
-        @sdk = MKMapRectMake(origin.sdk.x, origin.sdk.y, size.sdk.width, size.sdk.height)
+      def initialize(*args)
+        args.flatten!
+        if args.size == 2
+          origin = args[0].is_a?(MapPoint) ? args[0] : MapPoint.new(args[0])
+          size = args[1].is_a?(MapSize) ? args[1] : MapSize.new(args[1])
+          @sdk = MKMapRectMake(origin.sdk.x, origin.sdk.y, size.sdk.width, size.sdk.height)
+        elsif args.size == 4
+          @sdk = MKMapRectMake(args[0], args[1], args[2], args[3])
+        end
       end
 
       def origin
