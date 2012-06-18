@@ -4,14 +4,13 @@ require File.expand_path('../lib/map_kit_wrapper/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Kasper Weibel Nielsen-Refs"]
   gem.email         = ["weibel@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{This is a MapKit wrapper for RubyMotion. It's purpose is to make make dealing with MapKit less painfull}
+  gem.homepage      = "https://github.com/weibel/MapKitWrapper"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "map_kit_wrapper"
+  gem.name          = "map-kit-wrapper"
   gem.require_paths = ["lib"]
   gem.version       = MapKit::VERSION
 
