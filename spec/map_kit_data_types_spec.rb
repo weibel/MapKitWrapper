@@ -141,10 +141,11 @@ describe 'MapKitDataTypes' do
     before do
       mp = MapKit::DataTypes::MapPoint.new(5, 8)
       ms = MapKit::DataTypes::MapSize.new(6, 9)
-      o_1 = MapKit::DataTypes::MapRect.new([5, 8], [6, 9])
-      o_2 = MapKit::DataTypes::MapRect.new(mp, ms)
-      o_3 = MapKit::DataTypes::MapRect.new(MKMapPointMake(5, 8), MKMapSizeMake(6, 9))
-      @array = [o_1, o_2, o_3]
+      o_1 = MapKit::DataTypes::MapRect.new(5, 8, 6, 9)
+      o_2 = MapKit::DataTypes::MapRect.new([5, 8], [6, 9])
+      o_3 = MapKit::DataTypes::MapRect.new(mp, ms)
+      o_4 = MapKit::DataTypes::MapRect.new(MKMapPointMake(5, 8), MKMapSizeMake(6, 9))
+      @array = [o_1, o_2, o_3, o_4]
     end
 
     it 'should return the origin' do
