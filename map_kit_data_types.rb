@@ -5,7 +5,7 @@ module MapKit
 
     # Wrapper for MKCoordinateSpan
     class CoordinateSpan
-      attr_reader :original
+      attr_reader :sdk
 
       # CoordinateSpan.new(1,2)
       # CoordinateSpan.new([1,2])
@@ -13,18 +13,18 @@ module MapKit
       def initialize(*args)
         args.flatten!
         if args.first.is_a?(MKCoordinateSpan)
-          @original = args.first
+          @sdk = args.first
         else
-          @original = MKCoordinateSpanMake(args[0], args[1])
+          @sdk = MKCoordinateSpanMake(args[0], args[1])
         end
       end
 
       def latitude_delta
-        @original.latitudeDelta
+        @sdk.latitudeDelta
       end
 
       def longitude_delta
-        @original.longitudeDelta
+        @sdk.longitudeDelta
       end
 
       def to_array
@@ -35,7 +35,7 @@ module MapKit
     # Wrapper for MKCoordinateRegion
     class CoordinateRegion
       include CoreLocation::DataTypes
-      attr_reader :original
+      attr_reader :sdk
 
       # CoordinateRegion.new([56, 10.6], [3.1, 3.1])
       # CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
@@ -43,15 +43,15 @@ module MapKit
       def initialize(center, span)
         center = LocationCoordinate.new(center) if !center.is_a?(LocationCoordinate)
         span = CoordinateSpan.new(span) if !span.is_a?(CoordinateSpan)
-        @original = MKCoordinateRegionMake(center.original, span.original)
+        @sdk = MKCoordinateRegionMake(center.sdk, span.sdk)
       end
 
       def center
-        LocationCoordinate.new(@original.center)
+        LocationCoordinate.new(@sdk.center)
       end
 
       def span
-        CoordinateSpan.new(@original.span)
+        CoordinateSpan.new(@sdk.span)
       end
 
       def to_hash
@@ -61,7 +61,7 @@ module MapKit
 
     # Wrapper for MKMapPoint
     class MapPoint
-      attr_reader :original
+      attr_reader :sdk
 
       # MapPoint.new(50,45)
       # MapPoint.new([50,45])
@@ -69,18 +69,18 @@ module MapKit
       def initialize(*args)
         args.flatten!
         if args.first.is_a?(MKMapPoint)
-          @original = args.first
+          @sdk = args.first
         else
-          @original = MKMapPointMake(args[0], args[1])
+          @sdk = MKMapPointMake(args[0], args[1])
         end
       end
 
       def x
-        @original.x
+        @sdk.x
       end
 
       def y
-        @original.y
+        @sdk.y
       end
 
       def to_array
@@ -90,7 +90,7 @@ module MapKit
 
     # Wrapper for MKMapSize
     class MapSize
-      attr_reader :original
+      attr_reader :sdk
 
       # MapSize.new(10,12)
       # MapSize.new([10,12])
@@ -98,18 +98,18 @@ module MapKit
       def initialize(*args)
         args.flatten!
         if args.first.is_a?(MKMapSize)
-          @original = args.first
+          @sdk = args.first
         else
-          @original = MKMapSizeMake(args[0], args[1])
+          @sdk = MKMapSizeMake(args[0], args[1])
         end
       end
 
       def width
-        @original.width
+        @sdk.width
       end
 
       def height
-        @original.height
+        @sdk.height
       end
 
       def to_array
@@ -119,7 +119,7 @@ module MapKit
 
     # Wrapper for MKMapRect
     class MapRect
-      attr_reader :original
+      attr_reader :sdk
 
       # MapRect.new([10,12], [2,4])
       # MapRect.new(MapPoint, MapSize)
@@ -127,15 +127,15 @@ module MapKit
       def initialize(origin, size)
         origin = MapPoint.new(origin) if !origin.is_a?(MapPoint)
         size = MapSize.new(size) if !size.is_a?(MapSize)
-        @original = MKMapRectMake(origin.original, size.original)
+        @sdk = MKMapRectMake(origin.sdk.x, origin.sdk.y, size.sdk.width, size.sdk.height)
       end
 
       def origin
-        MapPoint.new(@original.origin)
+        MapPoint.new(@sdk.origin)
       end
 
       def size
-        MapSize.new(@original.size)
+        MapSize.new(@sdk.size)
       end
 
       def to_hash
