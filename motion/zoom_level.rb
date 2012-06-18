@@ -1,31 +1,40 @@
 module MapKit
   # Ruby conversion of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
   module ZoomLevel
+    include Math
     MERCATOR_OFFSET = 268435456
     MERCATOR_RADIUS = 85445659.44705395
 
-    # Map conversion methods
+    module ClassMethods
+      include Math
+      # Map conversion methods
 
-    def self.longitude_to_pixel_space_x(longitude)
-      round(MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * PI / 180.0)
-    end
-
-    def self.latitude_to_pixel_space_y(latitude)
-      if latitude == 90.0
-        0
-      elsif latitude == -90.0
-        MERCATOR_OFFSET * 2
-      else
-        round(MERCATOR_OFFSET - MERCATOR_RADIUS * log((1 + sin(latitude * PI / 180.0)) / (1 - sin(latitude * PI / 180.0))) / 2.0)
+      def longitude_to_pixel_space_x(longitude)
+        (MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * PI / 180.0).round
       end
+
+      def latitude_to_pixel_space_y(latitude)
+        if latitude == 90.0
+          0
+        elsif latitude == -90.0
+          MERCATOR_OFFSET * 2
+        else
+          (MERCATOR_OFFSET - MERCATOR_RADIUS * log((1 + sin(latitude * PI / 180.0)) / (1 - sin(latitude * PI / 180.0))) / 2.0).round
+        end
+      end
+
+      def pixel_space_x_to_longitude(pixel_x)
+        (((pixel_x).round - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / PI
+      end
+
+      def pixel_space_y_to_latitude(pixel_y)
+        (PI / 2.0 - 2.0 * atan(exp(((pixel_y).round - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / PI
+      end
+
     end
 
-    def self.pixel_space_x_to_longitude(pixel_x)
-      ((round(pixel_x) - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / PI
-    end
-
-    def self.pixel_space_y_to_latitude(pixel_y)
-      (PI / 2.0 - 2.0 * atan(exp((round(pixel_y) - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / PI
+    def self.included(base)
+      base.extend(ClassMethods)
     end
 
     # Helper methods

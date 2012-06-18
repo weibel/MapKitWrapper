@@ -6,6 +6,7 @@ module MapKit
   class MapView < MKMapView
     include CoreLocation::DataTypes
     include MapKit::DataTypes
+    include MapKit::ZoomLevel
 
     def initialize
       self.alloc.init
