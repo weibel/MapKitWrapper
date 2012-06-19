@@ -15,4 +15,14 @@ describe 'ZoomLevel' do
     MapKit::MapView.latitude_to_pixel_space_y(-90).should.equal 536870912
     MapKit::MapView.latitude_to_pixel_space_y(180).should.equal 268435392
   end
+
+  it 'should return pixel_space_x_to_longitude' do
+    MapKit::MapView.pixel_space_x_to_longitude(313174656).should.equal 29.999984741210 # 30
+  end
+
+  it 'should return pixel_space_y_to_latitude' do
+    MapKit::MapView.pixel_space_y_to_latitude(0).should.equal 85.0511169433594 # 90
+    MapKit::MapView.pixel_space_y_to_latitude(536870912).should.equal -85.0511169433594 # -90
+    MapKit::MapView.pixel_space_y_to_latitude(268435392).should.equal 180
+  end
 end

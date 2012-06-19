@@ -2,7 +2,7 @@ module MapKit
   # Ruby conversion of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
   module ZoomLevel
     include Math
-    MERCATOR_OFFSET = 268435456
+    MERCATOR_OFFSET = 268435456.0
     MERCATOR_RADIUS = 85445659.44705395
 
     module ClassMethods
@@ -24,11 +24,11 @@ module MapKit
       end
 
       def pixel_space_x_to_longitude(pixel_x)
-        (((pixel_x).round - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / PI
+        ((pixel_x.round - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / PI
       end
 
       def pixel_space_y_to_latitude(pixel_y)
-        (PI / 2.0 - 2.0 * atan(exp(((pixel_y).round - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / PI
+        (PI / 2.0 - 2.0 * atan(exp((pixel_y.round - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / PI
       end
 
     end
