@@ -5,9 +5,21 @@ This is a MapKit wrapper for RubyMotion. It's purpose is to make make dealing wi
 
 It is still work in progress, but right now there are wrappers for the Map Kit Data Types and the Core Location Data Types. Those will save you a lot of typing.
 
+## Installation
+```ruby
+gem install map-kit-wrapper
+```
+
+## Setup
+
+Edit the `Rakefile` of your RubyMotion project and add the following require line.
+
+```ruby
+require 'map-kit-wrapper'
+```
+
 ## Example
 ```ruby
-include MapKit
 
 def loadView
   self.view = UIView.alloc.initWithFrame(tabBarController.view.bounds)
