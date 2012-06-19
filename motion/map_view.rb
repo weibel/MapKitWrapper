@@ -55,7 +55,7 @@ module MapKit
     def set_region(coordinate_region, *args)
       opts = {:animated => false}
       opts.merge!(args.first) if args.first
-      #self.setRegion(coordinate_region.sdk, animated:opts[:animated])
+      self.setRegion(coordinate_region.sdk, animated:opts[:animated])
     end
   end
 end
