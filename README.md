@@ -42,10 +42,4 @@ Get the users coordinates
 ```ruby
 @map.user_coordinates
 ```    
-## Setup
 
-Check out MapKitWrapper in the app folder and insert the following in your rakefile
-```ruby
-app.files =  Dir.glob(File.join(app.project_dir, 'app/MapKitWrapper/**/*.rb')) | Dir.glob(File.join(app.project_dir, 'app/**/*.rb'))
-app.frameworks += ['CoreLocation', 'MapKit']
-```
