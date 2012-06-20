@@ -36,10 +36,13 @@ describe 'MapKitDataTypes' do
     before do
       lc = CoreLocation::DataTypes::LocationCoordinate.new(5, 8)
       cs = MapKit::DataTypes::CoordinateSpan.new(6, 9)
+      mkcr = MKCoordinateRegionMake(CLLocationCoordinate2DMake(5, 8), MKCoordinateSpanMake(6, 9))
       o_1 = MapKit::DataTypes::CoordinateRegion.new([5, 8], [6, 9])
       o_2 = MapKit::DataTypes::CoordinateRegion.new(lc, cs)
       o_3 = MapKit::DataTypes::CoordinateRegion.new(CLLocationCoordinate2DMake(5, 8), MKCoordinateSpanMake(6, 9))
-      @array = [o_1, o_2, o_3]
+      o_4 = MapKit::DataTypes::CoordinateRegion.new(mkcr)
+      o_5 = MapKit::DataTypes::CoordinateRegion.new(o_1)
+      @array = [o_1, o_2, o_3, o_4, o_5]
     end
 
     it 'should return the center' do

@@ -34,8 +34,16 @@ module MapKit
 
     # user location methods
 
+    def shows_user_location?
+      self.showsUserLocation
+    end
+
+    def shows_user_location=(enabled)
+      self.showsUserLocation = enabled
+    end
+
     def user_located?
-      self.userLocation.location ? true : false
+      self.shows_user_location? && self.userLocation.location ? true : false
     end
 
     def user_coordinates
@@ -48,8 +56,8 @@ module MapKit
       CoordinateRegion.new(self.region.center, self.region.span)
     end
 
-    def region=(coordinate_region)
-      self.set_region(coordinate_region)
+    def region=(*args)
+      self.set_region(CoordinateRegion.new(args.first), false)
     end
 
     def set_region(coordinate_region, *args)

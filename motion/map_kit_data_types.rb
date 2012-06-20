@@ -37,13 +37,23 @@ module MapKit
       include CoreLocation::DataTypes
       attr_reader :sdk
 
+      # CoordinateRegion.new(CoordinateRegion)
+      # CoordinateRegion.new(MKCoordinateRegion)
       # CoordinateRegion.new([56, 10.6], [3.1, 3.1])
       # CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
       # CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
-      def initialize(center, span)
-        center = LocationCoordinate.new(center) if !center.is_a?(LocationCoordinate)
-        span = CoordinateSpan.new(span) if !span.is_a?(CoordinateSpan)
-        @sdk = MKCoordinateRegionMake(center.sdk, span.sdk)
+      def initialize(*args)
+        if args.size == 1
+          if args[0].is_a?(CoordinateRegion)
+            center, span = args[0].center.sdk, args[0].span.sdk
+          else
+            center, span = args[0].center, args[0].span
+          end
+        else
+          center = args[0].is_a?(LocationCoordinate) ? args[0].sdk : args[0]
+          span = args[1].is_a?(CoordinateSpan) ? args[1].sdk : args[1]
+        end
+        @sdk = MKCoordinateRegionMake(center, span)
       end
 
       def center

@@ -139,9 +139,9 @@ module MapKit
       self.setRegion(region, animated: animated)
     end
 
-    def set_map_lat_lon(latitude, longitude, zoom, animated)
+    def set_map_lat_lon(latitude, longitude, zoom_level, animated)
       coordinates = CLLocationCoordinate2DMake(latitude, longitude)
-      self.set_center_coordinates(coordinates, zoom, animated)
+      self.set_center_coordinates(coordinates, zoom_level, animated)
     end
 
     def zoom_level
