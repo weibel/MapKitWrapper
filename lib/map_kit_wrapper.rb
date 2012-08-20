@@ -1,1 +1,0 @@
-require 'map_kit_wrapper/version' unless defined?(MapKit::VERSION)
