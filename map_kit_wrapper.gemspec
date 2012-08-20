@@ -14,6 +14,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = MapKit::VERSION
 
-  gem.add_dependency 'bubble-wrap'
   gem.add_development_dependency 'rake'
 end
