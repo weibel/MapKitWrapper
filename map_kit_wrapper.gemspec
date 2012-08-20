@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/map_kit_wrapper/version', __FILE__)
+require File.expand_path('../lib/map-kit-wrapper/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Kasper Weibel Nielsen-Refs"]
@@ -13,6 +13,8 @@ Gem::Specification.new do |gem|
   gem.name          = "map-kit-wrapper"
   gem.require_paths = ["lib"]
   gem.version       = MapKit::VERSION
+
+  #gem.add_dependency 'motion_require'
 
   gem.add_development_dependency 'rake'
 end
