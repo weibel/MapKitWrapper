@@ -110,6 +110,7 @@ It's a Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-
 ## Wrappers for the CoreLocation data types
 
 Include the module
+
 ```ruby
 include CoreLocation::DataTypes
 ```
@@ -117,6 +118,7 @@ include CoreLocation::DataTypes
 ### LocationCoordinate: The wrapper for CLLocationCoordinate2D
 
 The `LocationCoordinate` initializer takes a variety of argument types
+
 ```ruby
 LocationCoordinate.new(1,2)
 LocationCoordinate.new([1,2])
@@ -125,6 +127,7 @@ LocationCoordinate.new(CLLocationCoordinate2D)
 ```
 
 Methods on `LocationCoordinate`
+
 ```ruby
 >> lc = LocationCoordinate.new(1, 2)
 => [1, 2]
