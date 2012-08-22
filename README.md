@@ -94,7 +94,7 @@ Location methods
 
 ### MapView zoom level methods
 
-MapView includes calculations to easily get and set the zoom level as seen on Google Maps
+MapView includes calculations to easily get and set the zoom level as seen on Google Maps.
 It's a Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
 
 ```ruby

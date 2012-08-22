@@ -1,14 +1,15 @@
 # require core_location_data_types
 
 module MapKit
+  ##
   # Wrappers for the Map Kit Data Types
   # http://developer.apple.com/library/ios/#documentation/MapKit/Reference/MapKitDataTypesReference/Reference/reference.html
   module DataTypes
-
+    ##
     # Wrapper for MKCoordinateSpan
     class CoordinateSpan
       attr_reader :sdk
-
+      ##
       # CoordinateSpan.new(1,2)
       # CoordinateSpan.new([1,2])
       # CoordinateSpan.new(MKCoordinateSpan)
@@ -33,12 +34,12 @@ module MapKit
         [latitude_delta, longitude_delta]
       end
     end
-
+    ##
     # Wrapper for MKCoordinateRegion
     class CoordinateRegion
       include CoreLocation::DataTypes
       attr_reader :sdk
-
+      ##
       # CoordinateRegion.new(CoordinateRegion)
       # CoordinateRegion.new(MKCoordinateRegion)
       # CoordinateRegion.new([56, 10.6], [3.1, 3.1])
@@ -70,11 +71,11 @@ module MapKit
         {:center => center.to_array, :span => span.to_array}
       end
     end
-
+    ##
     # Wrapper for MKMapPoint
     class MapPoint
       attr_reader :sdk
-
+      ##
       # MapPoint.new(50,45)
       # MapPoint.new([50,45])
       # MapPoint.new(MKMapPoint)
@@ -99,11 +100,11 @@ module MapKit
         [x, y]
       end
     end
-
+    ##
     # Wrapper for MKMapSize
     class MapSize
       attr_reader :sdk
-
+      ##
       # MapSize.new(10,12)
       # MapSize.new([10,12])
       # MapSize.new(MKMapSize)
@@ -128,11 +129,11 @@ module MapKit
         [width, height]
       end
     end
-
+    ##
     # Wrapper for MKMapRect
     class MapRect
       attr_reader :sdk
-
+      ##
       # MapRect.new(x, y, width, height)
       # MapRect.new([x, y], [width, height])
       # MapRect.new(MapPoint, MapSize)

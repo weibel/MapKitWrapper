@@ -1,12 +1,14 @@
 module CoreLocation
+  ##
   # Wrappers for the Core Location Data Types
   # http://developer.apple.com/library/mac/#documentation/CoreLocation/Reference/CoreLocationDataTypesRef/Reference/reference.html
   module DataTypes
-
+    ##
     # Ruby wrapper for CLLocationCoordinate2D
     class LocationCoordinate
       attr_reader :sdk
 
+      ##
       # LocationCoordinate.new(1,2)
       # LocationCoordinate.new([1,2])
       # LocationCoordinate.new(LocationCoordinate)

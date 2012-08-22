@@ -8,6 +8,8 @@ module MapKit
           :satellite
         when MKMapTypeHybrid
           :hybrid
+        else
+          raise "Unknown map type: #{map_type.inspect}"
       end
     end
 
@@ -19,6 +21,8 @@ module MapKit
           MKMapTypeSatellite
         when :hybrid
           MKMapTypeHybrid
+        else
+          raise "Unknown map type: #{map_type.inspect}"
       end
     end
   end

@@ -1,13 +1,15 @@
 module MapKit
-  # Ruby conversion of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
+  ##
+  # Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
   module ZoomLevel
     include Math
     MERCATOR_OFFSET = 268435456.0
     MERCATOR_RADIUS = 85445659.44705395
 
+    ##
+    # Map conversion methods
     module ClassMethods
       include Math
-      # Map conversion methods
 
       def longitude_to_pixel_space_x(longitude)
         (MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * PI / 180.0).round
@@ -63,6 +65,7 @@ module MapKit
         MKCoordinateSpanMake(latitude_delta, longitude_delta)
       end
 
+      ##
       # KMapView cannot display tiles that cross the pole
       # This would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do.
       def coordinate_region_with_map_view(map_view, center_coordinate, zoom_level)
@@ -127,9 +130,9 @@ module MapKit
 
     # Public methods
 
-    def set_center_coordinates(center_coordinate, zoom_level, animated)
-      # clamp large numbers to 28
-      zoom_level = [zoom_level, 28].min
+    def set_center_coordinates(center_coordinate, zoom_level, animated = false)
+      # clamp large numbers to 18
+      zoom_level = [zoom_level, 18].min
 
       # use the zoom level to compute the region
       span = self.class.coordinate_span_with_map_view(self, center_coordinate, zoom_level)
@@ -139,10 +142,13 @@ module MapKit
       self.setRegion(region, animated: animated)
     end
 
-    def set_map_lat_lon(latitude, longitude, zoom_level, animated)
+    def set_map_lat_lon(latitude, longitude, zoom_level, animated = false)
       coordinates = CLLocationCoordinate2DMake(latitude, longitude)
       self.set_center_coordinates(coordinates, zoom_level, animated)
     end
+
+    ##
+    # Get the current zoom level
 
     def zoom_level
       region = self.region
@@ -156,6 +162,13 @@ module MapKit
       zoom_exponent = log(zoom_scale) / log(2)
       zoom_level = 20 - zoom_exponent
       zoom_level
+    end
+
+    ##
+    # Set the current zoom level
+
+    def set_zoom_level(zoom_level, animated = false)
+      self.set_center_coordinates(self.region.center, zoom_level, animated)
     end
 
   end

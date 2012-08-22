@@ -40,6 +40,8 @@ describe 'ZoomLevel' do
     span.longitude_delta.should.equal 56.25
     center.latitude.should.equal 55.9737854003906
     center.longitude.should.equal 10.01953125
+    @map.set_center_coordinates(CLLocationCoordinate2DMake(0, 0), 50, false)
+    @map.zoom_level.should.equal 18
   end
 
   it 'should return set_map_lat_lon' do
@@ -67,5 +69,10 @@ describe 'ZoomLevel' do
 
   it 'should have a zoom_level' do
     @map.zoom_level.should.equal 5.00000381469727
+  end
+
+  it 'should set a zoom_level' do
+    @map.set_zoom_level(15, false)
+    @map.zoom_level.should.equal 15
   end
 end
