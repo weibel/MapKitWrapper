@@ -37,7 +37,7 @@ def loadView
 end
 ```
 
-## MapView: Wrapper for MKMapView
+## MapView: Convenient subclass of MKMapView
 
 Include the module
 ```ruby
@@ -76,27 +76,35 @@ Scroll methods
 
 Location methods
 
-Check if the users location has been found
 ```ruby
 >> map.user_located?
 => false
-
 >> map.shows_user_location?
 => false
-
 >> map.user_coordinates
 => nil
-
 >> map.shows_user_location = true
 => true
-
 # wait for a bit
-
 >> map.user_located?
 => true
-
 >> map.user_coordinates
 => LocationCoordinate
+```
+
+### MapView zoom level methods
+
+MapView includes calculations to easily get and set the zoom level as seen on Google Maps
+It's a Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
+
+```ruby
+>> map.zoom_level
+=> 5
+>> map.set_zoom_level(13)
+=> 13
+# set the zoom level with animation
+>> map.set_zoom_level(13, true)
+=> 13
 ```
 
 ## Wrappers for the CoreLocation data types
@@ -120,20 +128,16 @@ Methods on `LocationCoordinate`
 ```ruby
 >> lc = LocationCoordinate.new(1, 2)
 => [1, 2]
-
 >> lc.latitude
 => 1
 >> lc.latitude = 10
 => 10
-
 >> lc.longitude
 => 2
 >> lc.longitude = 15
 => 15
-
 >> lc.to_array
 => [10, 15]
-
 >> lc.sdk
 => CLLocationCoordinate2D
 ```
@@ -161,16 +165,12 @@ Methods on `CoordinateSpan`
 ```ruby
 >> cs = CoordinateSpan.new(1, 2)
 => [1, 2]
-
 >> cs.latitude_delta
 => 1
-
 >> cs.longitude_delta
 => 2
-
 >> cs.to_array
 => [1, 2]
-
 >> cs.sdk
 => MKCoordinateSpan
 ```
@@ -192,16 +192,12 @@ Methods on `CoordinateRegion`
 ```ruby
 >> cr = CoordinateRegion.new([56, 10.6], [3.1, 5.1])
 => {:center => [56, 10.6], :span => [3.1, 5.1]}
-
 >> cs.center
 => LocationCoordinate([56, 10.6])
-
 >> cs.region
 => CoordinateSpan([3.1, 5.1])
-
 >> cs.to_hash
 => {:center => [56, 10.6], :span => [3.1, 5.1]}
-
 >> cs.sdk
 => MKCoordinateRegion
 ```
@@ -221,16 +217,12 @@ Methods on `MapPoint`
 ```ruby
 >> mp = MapPoint.new(50, 45)
 => [50, 45]
-
 >> mp.x
 => 50
-
 >> mp.y
 => 45
-
 >> mp.to_array
 => [50, 45]
-
 >> mp.sdk
 => MKMapPoint
 ```
@@ -250,16 +242,12 @@ Methods on `MapSize`
 ```ruby
 >> ms = MapSize.new(10, 12)
 => [10, 12]
-
 >> ms.width
 => 10
-
 >> ms.height
 => 12
-
 >> ms.to_array
 => [50, 45]
-
 >> ms.sdk
 => MKMapSize
 ```
@@ -280,16 +268,12 @@ Methods on `MapRect`
 ```ruby
 >> mr = MapRect.new(2, 3, 10, 12)
 => {:origin => [2, 3], :size => [10, 12]}
-
 >> mr.origin
 => MapRect([2, 3])
-
 >> mr.size
 => MapSize([10, 12])
-
 >> mr.to_hash
 => {:origin => [2, 3], :size => [10, 12]}
-
 >> mr.sdk
 => MKMapRect
 ```
