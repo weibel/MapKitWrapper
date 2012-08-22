@@ -15,8 +15,8 @@ gem install map-kit-wrapper
 Edit the `Rakefile` of your RubyMotion project and add the following require line.
 
 ```ruby
-# use underscores for now
-require 'map_kit_wrapper'
+
+require 'map-kit-wrapper'
 ```
 
 ## Example
