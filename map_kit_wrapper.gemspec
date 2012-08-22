@@ -14,7 +14,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = MapKit::VERSION
 
-  #gem.add_dependency 'motion_require'
-
-  gem.add_development_dependency 'rake'
+  gem.add_dependency 'codependency', '0.2.0'
+  gem.add_dependency 'rake'
 end

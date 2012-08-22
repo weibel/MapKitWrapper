@@ -1,3 +1,5 @@
+# require core_location_data_types
+
 module MapKit
   # Wrappers for the Map Kit Data Types
   # http://developer.apple.com/library/ios/#documentation/MapKit/Reference/MapKitDataTypesReference/Reference/reference.html
