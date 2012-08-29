@@ -1,7 +1,7 @@
 MapKitWrapper
 =============
 
-This is a MapKit wrapper for RubyMotion. It's purpose is to make make dealing with MapKit less painful.
+This is a MapKit wrapper for RubyMotion. It's purpose is to make dealing with MapKit less painful.
 
 MapKitWrapper is work in progress. Right now there are wrappers for the Map Kit Data Types and the Core Location Data Types. Those will save you a lot of typing.
 
