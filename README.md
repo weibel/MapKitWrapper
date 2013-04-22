@@ -166,6 +166,7 @@ The `CoordinateSpan` initializer takes a variety of argument types
 ```ruby
 CoordinateSpan.new(1, 2)
 CoordinateSpan.new([1, 2])
+CoordinateSpan.new(CoordinateSpan)
 CoordinateSpan.new(MKCoordinateSpan)
 ```
 
