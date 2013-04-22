@@ -18,11 +18,7 @@ module CoreLocation
         args.flatten!
         if args.size == 1
           arg = args.first
-          if arg.is_a?(CLLocationCoordinate2D)
-            latitude, longitude = arg.latitude, arg.longitude
-          elsif arg.is_a?(LocationCoordinate)
-            latitude, longitude = arg.sdk.latitude, arg.sdk.longitude
-          end
+          latitude, longitude = arg.latitude, arg.longitude
         elsif args.size == 2
           latitude, longitude = args[0], args[1]
         end
