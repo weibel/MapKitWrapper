@@ -7,7 +7,7 @@ describe 'ZoomLevel' do
   end
 
   it 'should return longitude_to_pixel_space_x' do
-    MapKit::MapView.longitude_to_pixel_space_x(30).should.equal 313174690
+    MapKit::MapView.longitude_to_pixel_space_x(30).should.equal 313174699
   end
 
   it 'should return latitude_to_pixel_space_y' do
@@ -17,7 +17,7 @@ describe 'ZoomLevel' do
   end
 
   it 'should return pixel_space_x_to_longitude' do
-    MapKit::MapView.pixel_space_x_to_longitude(313174690).should.equal 29.9999923706055 # 30
+    MapKit::MapView.pixel_space_x_to_longitude(313174699).should.equal 29.9999923706055 # 30
   end
 
   it 'should return pixel_space_y_to_latitude' do
@@ -29,7 +29,7 @@ describe 'ZoomLevel' do
   it 'should return coordinate_span_with_map_view' do
     span = MapKit::MapView.coordinate_span_with_map_view(@map, CLLocationCoordinate2DMake(56, 10), 2)
     span.latitudeDelta.should.equal 48.4522247314453
-    span.longitudeDelta.should.equal 56.25
+    span.longitudeDelta.should.equal 56.2499694824219
   end
 
   it 'should return set_center_coordinates' do
@@ -62,7 +62,7 @@ describe 'ZoomLevel' do
     center = CoreLocation::DataTypes::LocationCoordinate.new(region.center)
     span = MapKit::DataTypes::CoordinateSpan.new(region.span)
     span.latitude_delta.should.equal 48.4522247314453
-    span.longitude_delta.should.equal 56.25
+    span.longitude_delta.should.equal 56.2499694824219
     center.latitude.should.equal 56.0
     center.longitude.should.equal 10.0
   end

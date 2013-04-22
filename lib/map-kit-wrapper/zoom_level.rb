@@ -1,10 +1,11 @@
 module MapKit
   ##
   # Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
+  # More here http://troybrant.net/blog/2010/01/mkmapview-and-zoom-levels-a-visual-guide/
   module ZoomLevel
     include Math
     MERCATOR_OFFSET = 268435456.0
-    MERCATOR_RADIUS = 85445659.44705395
+    MERCATOR_RADIUS = MERCATOR_OFFSET / PI
 
     ##
     # Map conversion methods
