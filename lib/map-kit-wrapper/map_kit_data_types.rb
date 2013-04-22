@@ -12,14 +12,23 @@ module MapKit
       ##
       # CoordinateSpan.new(1,2)
       # CoordinateSpan.new([1,2])
+      # CoordinateSpan.new(CoordinateSpan)
       # CoordinateSpan.new(MKCoordinateSpan)
       def initialize(*args)
+        latitude_delta, longitude_delta = nil, nil
         args.flatten!
-        if args.first.is_a?(MKCoordinateSpan)
-          @sdk = args.first
-        else
-          @sdk = MKCoordinateSpanMake(args[0], args[1])
+        if args.size == 1
+          arg = args.first
+          if arg.is_a?(MKCoordinateSpan)
+            latitude_delta, longitude_delta = arg.latitudeDelta, arg.longitudeDelta
+          elsif arg.is_a?(CoordinateSpan)
+            latitude_delta, longitude_delta = arg.latitude_delta, arg.longitude_delta
+          end
+        elsif args.size == 2
+          latitude_delta, longitude_delta = args[0], args[1]
         end
+        @sdk = MKCoordinateSpanMake(latitude_delta, longitude_delta)
+        self
       end
 
       def latitude_delta

@@ -4,7 +4,8 @@ describe 'MapKitDataTypes' do
       o_1 = MapKit::DataTypes::CoordinateSpan.new(5, 8)
       o_2 = MapKit::DataTypes::CoordinateSpan.new([5, 8])
       o_3 = MapKit::DataTypes::CoordinateSpan.new(MKCoordinateSpanMake(5, 8))
-      @array = [o_1, o_2, o_3]
+      o_4 = MapKit::DataTypes::CoordinateSpan.new(o_1)
+      @array = [o_1, o_2, o_3, o_4]
     end
 
     it 'should return the latitude delta' do
