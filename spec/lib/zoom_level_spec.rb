@@ -7,7 +7,7 @@ describe 'ZoomLevel' do
   end
 
   it 'should return longitude_to_pixel_space_x' do
-    MapKit::MapView.longitude_to_pixel_space_x(30).should.equal 313174656
+    MapKit::MapView.longitude_to_pixel_space_x(30).should.equal 313174690
   end
 
   it 'should return latitude_to_pixel_space_y' do
@@ -17,7 +17,7 @@ describe 'ZoomLevel' do
   end
 
   it 'should return pixel_space_x_to_longitude' do
-    MapKit::MapView.pixel_space_x_to_longitude(313174656).should.equal 29.999984741210 # 30
+    MapKit::MapView.pixel_space_x_to_longitude(313174690).should.equal 29.9999923706055 # 30
   end
 
   it 'should return pixel_space_y_to_latitude' do
@@ -28,7 +28,7 @@ describe 'ZoomLevel' do
 
   it 'should return coordinate_span_with_map_view' do
     span = MapKit::MapView.coordinate_span_with_map_view(@map, CLLocationCoordinate2DMake(56, 10), 2)
-    span.latitudeDelta.should.equal 48.452224731445
+    span.latitudeDelta.should.equal 48.4522247314453
     span.longitudeDelta.should.equal 56.25
   end
 
@@ -36,10 +36,10 @@ describe 'ZoomLevel' do
     @map.set_center_coordinates(CLLocationCoordinate2DMake(56, 10), 2, false)
     center = CoreLocation::DataTypes::LocationCoordinate.new(@map.region.center)
     span = MapKit::DataTypes::CoordinateSpan.new(@map.region.span)
-    span.latitude_delta.should.equal 48.4812927246094
+    span.latitude_delta.should.equal 48.4522247314453
     span.longitude_delta.should.equal 56.25
-    center.latitude.should.equal 55.9737854003906
-    center.longitude.should.equal 10.01953125
+    center.latitude.should.equal 56.0
+    center.longitude.should.equal 10.0
     @map.set_center_coordinates(CLLocationCoordinate2DMake(0, 0), 50, false)
     @map.zoom_level.should.equal 18
   end
@@ -48,10 +48,10 @@ describe 'ZoomLevel' do
     @map.set_map_lat_lon(56, 10, 2, false)
     center = CoreLocation::DataTypes::LocationCoordinate.new(@map.region.center)
     span = MapKit::DataTypes::CoordinateSpan.new(@map.region.span)
-    span.latitude_delta.should.equal 48.4812927246094
+    span.latitude_delta.should.equal 48.4522247314453
     span.longitude_delta.should.equal 56.25
-    center.latitude.should.equal 55.9737854003906
-    center.longitude.should.equal 10.01953125
+    center.latitude.should.equal 56.0
+    center.longitude.should.equal 10.0
   end
 
   it 'should return coordinate_region_with_map_view' do

@@ -1,4 +1,4 @@
-# require core_location_data_types
+#= require core_location_data_types
 
 module MapKit
   ##

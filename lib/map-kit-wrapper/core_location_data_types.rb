@@ -27,6 +27,7 @@ module CoreLocation
           latitude, longitude = args[0], args[1]
         end
         @sdk = CLLocationCoordinate2DMake(latitude, longitude)
+        self
       end
 
       def latitude

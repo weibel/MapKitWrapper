@@ -24,7 +24,7 @@ require 'map-kit-wrapper'
 class FooViewController < UIViewController
 	include MapKit
 	def viewDidLoad
-    super
+      super
 
 	  map = MapView.new
 	  map.frame = self.view.frame

@@ -1,6 +1,6 @@
-# require core_location_data_types
-# require map_kit_data_types
-# require zoom_level
+#= require core_location_data_types
+#= require map_kit_data_types
+#= require zoom_level
 
 module MapKit
   include CoreLocation::DataTypes
