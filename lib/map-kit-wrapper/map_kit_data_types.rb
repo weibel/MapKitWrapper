@@ -16,7 +16,6 @@ module MapKit
       # CoordinateSpan.new(CoordinateSpan)
       # CoordinateSpan.new(MKCoordinateSpan)
       def initialize(*args)
-        latitudedelta, longitudedelta = nil, nil
         args.flatten!
         case args.size
           when 1
@@ -69,7 +68,6 @@ module MapKit
       # CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
       # CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
       def initialize(*args)
-        center, span = nil, nil
         case args.size
           when 1
             arg = args[0]
@@ -108,7 +106,6 @@ module MapKit
       # MapPoint.new(MKMapPoint)
       def initialize(*args)
         args.flatten!
-        x, y = nil, nil
         case args.size
           when 1
             arg = args[0]
@@ -155,7 +152,6 @@ module MapKit
       # MapSize.new(MKMapSize)
       def initialize(*args)
         args.flatten!
-        width, height = nil, nil
         case args.size
           when 1
             arg = args[0]
@@ -202,7 +198,6 @@ module MapKit
       # MapRect.new(MapPoint, MapSize)
       # MapRect.new(MKMapPoint, MKMapSize)
       def initialize(*args)
-        origin, size = nil, nil
         case args.size
           when 1
             origin, size = args[0][:origin], args[0][:size]
