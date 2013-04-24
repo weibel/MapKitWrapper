@@ -35,7 +35,19 @@ describe 'LocationCoordinate' do
 
   it 'should return an array' do
     @array.each do |lc|
-      lc.to_array.should.equal [5, 8]
+      lc.to_a.should.equal [5, 8]
+    end
+  end
+
+  it 'should return a hash' do
+    @array.each do |lc|
+      lc.to_h.should.equal({:latitude => 5, :longitude => 8})
+    end
+  end
+
+  it 'should return a string' do
+    @array.each do |lc|
+      lc.to_s.should.equal '{:latitude=>5.0, :longitude=>8.0}'
     end
   end
 

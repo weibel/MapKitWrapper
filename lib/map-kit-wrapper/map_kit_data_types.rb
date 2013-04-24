@@ -39,7 +39,7 @@ module MapKit
         @sdk.longitudeDelta
       end
 
-      def to_array
+      def to_a
         [latitude_delta, longitude_delta]
       end
     end
@@ -76,8 +76,8 @@ module MapKit
         CoordinateSpan.new(@sdk.span)
       end
 
-      def to_hash
-        {:center => center.to_array, :span => span.to_array}
+      def to_h
+        {:center => center.to_a, :span => span.to_a}
       end
     end
     ##
@@ -105,7 +105,7 @@ module MapKit
         @sdk.y
       end
 
-      def to_array
+      def to_a
         [x, y]
       end
     end
@@ -134,7 +134,7 @@ module MapKit
         @sdk.height
       end
 
-      def to_array
+      def to_a
         [width, height]
       end
     end
@@ -166,8 +166,8 @@ module MapKit
         MapSize.new(@sdk.size)
       end
 
-      def to_hash
-        {:origin => origin.to_array, :size => size.to_array}
+      def to_h
+        {:origin => origin.to_a, :size => size.to_a}
       end
     end
   end

@@ -42,8 +42,16 @@ module CoreLocation
         @sdk.longitude = longitude
       end
 
-      def to_array
+      def to_a
         [latitude, longitude]
+      end
+
+      def to_h
+        {:latitude => latitude, :longitude => longitude}
+      end
+
+      def to_s
+        to_h.to_s
       end
     end
   end

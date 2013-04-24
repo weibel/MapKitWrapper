@@ -22,7 +22,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return an array' do
       @array.each do |o|
-        o.to_array.should.equal [5, 8]
+        o.to_a.should.equal [5, 8]
       end
     end
 
@@ -64,7 +64,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return a hash' do
       @array.each do |o|
-        o.to_hash.should.equal({:center => [5, 8], :span => [6, 9]})
+        o.to_h.should.equal({:center => [5, 8], :span => [6, 9]})
       end
     end
 
@@ -97,7 +97,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return an array' do
       @array.each do |o|
-        o.to_array.should.equal [5, 8]
+        o.to_a.should.equal [5, 8]
       end
     end
 
@@ -130,7 +130,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return an array' do
       @array.each do |o|
-        o.to_array.should.equal [5, 8]
+        o.to_a.should.equal [5, 8]
       end
     end
 
@@ -170,7 +170,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return a hash' do
       @array.each do |o|
-        o.to_hash.should.equal({:origin => [5, 8], :size => [6, 9]})
+        o.to_h.should.equal({:origin => [5, 8], :size => [6, 9]})
       end
     end
 

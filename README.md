@@ -145,8 +145,10 @@ Methods on `LocationCoordinate`
 => 2
 >> lc.longitude = 15
 => 15
->> lc.to_array
+>> lc.to_a
 => [10, 15]
+>> lc.to_h
+=> {:latitude => 10, :longitude => 15}
 >> lc.sdk
 => CLLocationCoordinate2D
 ```
@@ -179,7 +181,7 @@ Methods on `CoordinateSpan`
 => 1
 >> cs.longitude_delta
 => 2
->> cs.to_array
+>> cs.to_a
 => [1, 2]
 >> cs.sdk
 => MKCoordinateSpan
@@ -206,7 +208,7 @@ Methods on `CoordinateRegion`
 => LocationCoordinate([56, 10.6])
 >> cs.region
 => CoordinateSpan([3.1, 5.1])
->> cs.to_hash
+>> cs.to_h
 => {:center => [56, 10.6], :span => [3.1, 5.1]}
 >> cs.sdk
 => MKCoordinateRegion
@@ -231,7 +233,7 @@ Methods on `MapPoint`
 => 50
 >> mp.y
 => 45
->> mp.to_array
+>> mp.to_a
 => [50, 45]
 >> mp.sdk
 => MKMapPoint
@@ -256,7 +258,7 @@ Methods on `MapSize`
 => 10
 >> ms.height
 => 12
->> ms.to_array
+>> ms.to_a
 => [50, 45]
 >> ms.sdk
 => MKMapSize
@@ -282,7 +284,7 @@ Methods on `MapRect`
 => MapRect([2, 3])
 >> mr.size
 => MapSize([10, 12])
->> mr.to_hash
+>> mr.to_h
 => {:origin => [2, 3], :size => [10, 12]}
 >> mr.sdk
 => MKMapRect
