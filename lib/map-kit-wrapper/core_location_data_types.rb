@@ -11,6 +11,7 @@ module CoreLocation
       ##
       # LocationCoordinate.new(1,2)
       # LocationCoordinate.new([1,2])
+      # LocationCoordinate.new({:latitude => 1, :longitude => 2})
       # LocationCoordinate.new(LocationCoordinate)
       # LocationCoordinate.new(CLLocationCoordinate2D)
       def initialize(*args)
@@ -18,7 +19,12 @@ module CoreLocation
         args.flatten!
         if args.size == 1
           arg = args.first
-          latitude, longitude = arg.latitude, arg.longitude
+          if arg.is_a? Hash
+            latitude, longitude = arg[:latitude], arg[:longitude]
+          else
+            # For LocationCoordinate, CLLocationCoordinate2D
+            latitude, longitude = arg.latitude, arg.longitude
+          end
         elsif args.size == 2
           latitude, longitude = args[0], args[1]
         end

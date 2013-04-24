@@ -4,7 +4,8 @@ describe 'LocationCoordinate' do
     lc_2 = CoreLocation::DataTypes::LocationCoordinate.new([5, 8])
     lc_3 = CoreLocation::DataTypes::LocationCoordinate.new(CLLocationCoordinate2DMake(5, 8))
     lc_4 = CoreLocation::DataTypes::LocationCoordinate.new(lc_3)
-    @array = [lc_1, lc_2, lc_3, lc_4]
+    lc_5 = CoreLocation::DataTypes::LocationCoordinate.new({:latitude => 5, :longitude => 8})
+    @array = [lc_1, lc_2, lc_3, lc_4, lc_5]
   end
 
   it 'should return the latitude' do

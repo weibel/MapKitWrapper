@@ -128,6 +128,7 @@ The `LocationCoordinate` initializer takes a variety of argument types
 ```ruby
 LocationCoordinate.new(1,2)
 LocationCoordinate.new([1,2])
+LocationCoordinate.new({:latitude => 1, :longitude => 2})
 LocationCoordinate.new(LocationCoordinate)
 LocationCoordinate.new(CLLocationCoordinate2D)
 ```
