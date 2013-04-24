@@ -21,12 +21,13 @@ module MapKit
         case args.size
           when 1
             arg = args.first
-            if arg.is_a?(MKCoordinateSpan)
-              latitudedelta, longitudedelta = arg.latitudeDelta, arg.longitudeDelta
-            elsif arg.is_a?(CoordinateSpan)
-              latitudedelta, longitudedelta = arg.latitude_delta, arg.longitude_delta
-            elsif arg.is_a?(Hash)
-              latitudedelta, longitudedelta = arg[:latitude_delta], arg[:longitude_delta]
+            case arg
+              when MKCoordinateSpan
+                latitudedelta, longitudedelta = arg.latitudeDelta, arg.longitudeDelta
+              when CoordinateSpan
+                latitudedelta, longitudedelta = arg.latitude_delta, arg.longitude_delta
+              when Hash
+                latitudedelta, longitudedelta = arg[:latitude_delta], arg[:longitude_delta]
             end
           when 2
             latitudedelta, longitudedelta = args[0], args[1]
@@ -72,10 +73,11 @@ module MapKit
         case args.size
           when 1
             arg = args[0]
-            if arg.is_a?(CoordinateRegion) || arg.is_a?(MKCoordinateRegion)
-              center, span = arg.center, arg.span
-            elsif  arg.is_a?(Hash)
-              center, span = arg[:center], arg[:span]
+            case arg
+              when Hash
+                center, span = arg[:center], arg[:span]
+              else
+                center, span = arg.center, arg.span
             end
           when 2
             center = args[0]
@@ -111,10 +113,11 @@ module MapKit
         case args.size
           when 1
             arg = args[0]
-            if arg.is_a?(MKMapPoint) || arg.is_a?(MapPoint)
-              x, y = arg.x, arg.y
-            elsif arg.is_a?(Hash)
-              x, y = arg[:x], arg[:y]
+            case arg
+              when Hash
+                x, y = arg[:x], arg[:y]
+              else
+                x, y = arg.x, arg.y
             end
           when 2
             x, y = args[0], args[1]
@@ -156,11 +159,12 @@ module MapKit
         width, height = nil, nil
         case args.size
           when 1
-            arg= args[0]
-            if arg.is_a?(MKMapSize) || arg.is_a?(MapSize)
-              width, height = arg.width, arg.height
-            elsif arg.is_a?(Hash)
-              width, height = arg[:width], arg[:height]
+            arg = args[0]
+            case arg
+              when Hash
+                width, height = arg[:width], arg[:height]
+              else
+                width, height = arg.width, arg.height
             end
           when 2
             width, height = args[0], args[1]
