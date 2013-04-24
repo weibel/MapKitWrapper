@@ -55,7 +55,7 @@ module MapKit
     # Wrapper for MKCoordinateRegion
     class CoordinateRegion
       include CoreLocation::DataTypes
-      attr_accessor :center, :span
+      attr_reader :center, :span
       ##
       # CoordinateRegion.new(CoordinateRegion)
       # CoordinateRegion.new(MKCoordinateRegion)
@@ -76,7 +76,15 @@ module MapKit
           when 2
             center, span = args[0], args[1]
         end
-        @center, @span = LocationCoordinate.new(center), CoordinateSpan.new(span)
+        self.center, self.span = center, span
+      end
+
+      def center=(center)
+        @center = LocationCoordinate.new(center)
+      end
+
+      def span=(span)
+        @span = CoordinateSpan.new(span)
       end
 
       def sdk
@@ -192,11 +200,19 @@ module MapKit
           when 4
             origin, size = [args[0], args[1]], [args[2], args[3]]
         end
-        @origin, @size = MapPoint.new(origin), MapSize.new(size)
+        self.origin, self.size = origin, size
       end
 
       def sdk
         MKMapRectMake(@origin.x, @origin.y, @size.width, @size.height)
+      end
+
+      def origin=(origin)
+        @origin = MapPoint.new(origin)
+      end
+
+      def size=(size)
+        @size = MapSize.new(size)
       end
 
       def to_h

@@ -29,7 +29,6 @@ module CoreLocation
             latitude, longitude = args[0], args[1]
         end
         @latitude, @longitude = latitude.to_f, longitude.to_f
-        self
       end
 
       def sdk
