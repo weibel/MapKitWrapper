@@ -254,6 +254,7 @@ The `MapSize` initializer takes a variety of argument types
 ```ruby
 MapSize.new(10, 12)
 MapSize.new([10, 12])
+MapSize.new({:width => 50, :height => 45})
 MapSize.new(MKMapSize)
 ```
 
@@ -281,6 +282,7 @@ The `MapRect` initializer takes a variety of argument types
 ```ruby
 MapRect.new(x, y, width, height)
 MapRect.new([x, y], [width, height])
+MapRect.new({:origin => {:x => 2, :y => 3}, :size => {:width => 10, :height => 12}})
 MapRect.new(MapPoint, MapSize)
 MapRect.new(MKMapPoint, MKMapSize)
 ```

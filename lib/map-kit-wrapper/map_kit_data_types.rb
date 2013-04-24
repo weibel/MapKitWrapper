@@ -223,6 +223,10 @@ module MapKit
       def to_h
         {:origin => origin.to_h, :size => size.to_h}
       end
+
+      def to_s
+        to_h.to_s
+      end
     end
   end
 end
