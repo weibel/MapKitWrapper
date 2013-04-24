@@ -64,17 +64,17 @@ describe 'MapView' do
   # region
 
   it 'should show get_region' do
-    @map.get_region.should.satisfy { |object| object.is_a? MapKit::DataTypes::CoordinateRegion }
+    @map.region.should.satisfy { |object| object.is_a? MapKit::DataTypes::CoordinateRegion }
   end
 
   it 'should set region=' do
     @map.region = MapKit::CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-    @map.get_region.should.satisfy { |object| object.is_a? MapKit::DataTypes::CoordinateRegion }
+    @map.region.should.satisfy { |object| object.is_a? MapKit::DataTypes::CoordinateRegion }
   end
 
-  it 'should set_region(coordinate_region, *args)' do
-    @map.set_region(MapKit::CoordinateRegion.new([56, 10.6], [3.1, 3.1]), false)
-    @map.get_region.should.satisfy { |object| object.is_a? MapKit::DataTypes::CoordinateRegion }
+  it 'should set region = (coordinate_region, *args)' do
+    @map.region = {:region => MapKit::CoordinateRegion.new([56, 10.6], [3.1, 3.1]), :animated => false}
+    @map.region.should.satisfy { |object| object.is_a? MapKit::DataTypes::CoordinateRegion }
   end
 
 end

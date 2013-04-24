@@ -152,8 +152,7 @@ module MapKit
     # Get the current zoom level
 
     def zoom_level
-      region = self.region
-
+      region = self.region.sdk
       center_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude)
       top_left_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude - region.span.longitudeDelta / 2)
 
@@ -169,7 +168,7 @@ module MapKit
     # Set the current zoom level
 
     def set_zoom_level(zoom_level, animated = false)
-      self.set_center_coordinates(self.region.center, zoom_level, animated)
+      self.set_center_coordinates(self.region.sdk.center, zoom_level, animated)
     end
 
   end

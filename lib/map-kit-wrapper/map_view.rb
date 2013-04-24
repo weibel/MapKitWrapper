@@ -68,23 +68,31 @@ module MapKit
     end
 
     ##
-    # Get the maps region
-    def get_region
-      CoordinateRegion.new(self.region.center, self.region.span)
-    end
-
-    ##
     # Set the maps region
-    def region=(*args)
-      self.set_region(CoordinateRegion.new(args.first), false)
+    # region = CoordinateRegion.new([56, 10.6], [3.1, 3.1])
+    # region = {:region => CoordinateRegion.new([56, 10.6], [3.1, 3.1]), :animated => false}
+    def region=(args)
+      case args
+        when Hash
+          self.setRegion(CoordinateRegion.new(args[:region]).sdk, animated: args[:animated])
+        else
+          self.setRegion(CoordinateRegion.new(args).sdk, animated: false)
+      end
     end
 
-    ##
-    # Set the maps region including animation
-    def set_region(coordinate_region, *args)
-      opts = {:animated => false}
-      opts.merge!(args.first) if args.first
-      self.setRegion(coordinate_region.sdk, animated: opts[:animated])
+    def set_region
+      raise 'set_region has been deprecated. Please review the docs on region=()'
     end
+
+    module OverriddenMethods
+      include MapKit::DataTypes
+      ##
+      # Get the maps region
+      def region
+        CoordinateRegion.new(super)
+      end
+    end
+
+    include OverriddenMethods
   end
 end

@@ -29,11 +29,8 @@ class FooViewController < UIViewController
 	  map = MapView.new
 	  map.frame = self.view.frame
 	  map.delegate = self
-	  region = CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-	  map.region = region
-	  # Alternatively use set_region
-	  # map.set_region(region, :animated => true)
-	  map.showsUserLocation = true
+	  map.region = CoordinateRegion.new([56, 10.6], [3.1, 3.1])
+	  map.shows_user_location = true
 	  view.addSubview(map)
 	end
 	

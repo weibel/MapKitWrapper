@@ -1,6 +1,6 @@
 $:.unshift("/Library/RubyMotion/lib")
 require 'motion/project'
-require 'map-kit-wrapper'
+#require 'map-kit-wrapper'
 
 require "bundler/gem_tasks"
 Bundler.require
