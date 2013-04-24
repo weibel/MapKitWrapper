@@ -8,7 +8,7 @@ module MapKit
     ##
     # Wrapper for MKCoordinateSpan
     class CoordinateSpan
-      attr_accessor :latitude_delta, :longitude_delta
+      attr_reader :latitude_delta, :longitude_delta
       ##
       # CoordinateSpan.new(1,2)
       # CoordinateSpan.new([1,2])
@@ -17,26 +17,33 @@ module MapKit
       # CoordinateSpan.new(MKCoordinateSpan)
       def initialize(*args)
         args.flatten!
-        case args.size
-          when 1
-            arg = args.first
-            case arg
-              when MKCoordinateSpan
-                latitude_delta, longitude_delta = arg.latitudeDelta, arg.longitudeDelta
-              when CoordinateSpan
-                latitude_delta, longitude_delta = arg.latitude_delta, arg.longitude_delta
-              when Hash
-                latitude_delta, longitude_delta = arg[:latitude_delta], arg[:longitude_delta]
+        self.latitude_delta, self.longitude_delta =
+            case args.size
+              when 1
+                arg = args.first
+                case arg
+                  when MKCoordinateSpan
+                    [arg.latitudeDelta, arg.longitudeDelta]
+                  when CoordinateSpan
+                    [arg.latitude_delta, arg.longitude_delta]
+                  when Hash
+                    [arg[:latitude_delta], arg[:longitude_delta]]
+                end
+              when 2
+                [args[0], args[1]]
             end
-          when 2
-            latitude_delta, longitude_delta = args[0], args[1]
-        end
-        @latitude_delta, @longitude_delta = latitude_delta.to_f, longitude_delta.to_f
-        self
       end
 
       def sdk
         MKCoordinateSpanMake(@latitude_delta, @longitude_delta)
+      end
+
+      def latitude_delta=(delta)
+        @latitude_delta = delta.to_f
+      end
+
+      def longitude_delta=(delta)
+        @longitude_delta = delta.to_f
       end
 
       def to_a
@@ -64,19 +71,23 @@ module MapKit
       # CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
       # CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
       def initialize(*args)
-        case args.size
-          when 1
-            arg = args[0]
-            case arg
-              when Hash
-                center, span = arg[:center], arg[:span]
-              else
-                center, span = arg.center, arg.span
+        self.center, self.span =
+            case args.size
+              when 1
+                arg = args[0]
+                case arg
+                  when Hash
+                    [arg[:center], arg[:span]]
+                  else
+                    [arg.center, arg.span]
+                end
+              when 2
+                [args[0], args[1]]
             end
-          when 2
-            center, span = args[0], args[1]
-        end
-        self.center, self.span = center, span
+      end
+
+      def sdk
+        MKCoordinateRegionMake(@center.sdk, @span.sdk)
       end
 
       def center=(center)
@@ -85,10 +96,6 @@ module MapKit
 
       def span=(span)
         @span = CoordinateSpan.new(span)
-      end
-
-      def sdk
-        MKCoordinateRegionMake(@center.sdk, @span.sdk)
       end
 
       def to_h
@@ -102,7 +109,7 @@ module MapKit
     ##
     # Wrapper for MKMapPoint
     class MapPoint
-      attr_accessor :x, :y
+      attr_reader :x, :y
       ##
       # MapPoint.new(50,45)
       # MapPoint.new([50,45])
@@ -110,22 +117,31 @@ module MapKit
       # MapPoint.new(MKMapPoint)
       def initialize(*args)
         args.flatten!
-        case args.size
-          when 1
-            arg = args[0]
-            case arg
-              when Hash
-                @x, @y = arg[:x], arg[:y]
-              else
-                @x, @y = arg.x, arg.y
+        self.x, self.y =
+            case args.size
+              when 1
+                arg = args[0]
+                case arg
+                  when Hash
+                    [arg[:x], arg[:y]]
+                  else
+                    [arg.x, arg.y]
+                end
+              when 2
+                [args[0], args[1]]
             end
-          when 2
-            @x, @y = args[0], args[1]
-        end
       end
 
       def sdk
         MKMapPointMake(@x, @y)
+      end
+
+      def x=(x)
+        @x = x.to_f
+      end
+
+      def y=(y)
+        @y = y.to_f
       end
 
       def to_a
@@ -143,7 +159,7 @@ module MapKit
     ##
     # Wrapper for MKMapSize
     class MapSize
-      attr_accessor :width, :height
+      attr_reader :width, :height
       ##
       # MapSize.new(10,12)
       # MapSize.new([10,12])
@@ -151,22 +167,31 @@ module MapKit
       # MapSize.new(MKMapSize)
       def initialize(*args)
         args.flatten!
-        case args.size
-          when 1
-            arg = args[0]
-            case arg
-              when Hash
-                @width, @height = arg[:width], arg[:height]
-              else
-                @width, @height = arg.width, arg.height
+        self.width, self.height =
+            case args.size
+              when 1
+                arg = args[0]
+                case arg
+                  when Hash
+                    [arg[:width], arg[:height]]
+                  else
+                    [arg.width, arg.height]
+                end
+              when 2
+                [args[0], args[1]]
             end
-          when 2
-            @width, @height = args[0], args[1]
-        end
       end
 
       def sdk
         MKMapSizeMake(@width, @height)
+      end
+
+      def width=(width)
+        @width = width.to_f
+      end
+
+      def height=(height)
+        @height = height.to_f
       end
 
       def to_a
@@ -192,15 +217,15 @@ module MapKit
       # MapRect.new(MapPoint, MapSize)
       # MapRect.new(MKMapPoint, MKMapSize)
       def initialize(*args)
-        case args.size
-          when 1
-            origin, size = args[0][:origin], args[0][:size]
-          when 2
-            origin, size = args[0], args[1]
-          when 4
-            origin, size = [args[0], args[1]], [args[2], args[3]]
-        end
-        self.origin, self.size = origin, size
+        self.origin, self.size =
+            case args.size
+              when 1
+                [args[0][:origin], args[0][:size]]
+              when 2
+                [args[0], args[1]]
+              when 4
+                [[args[0], args[1]], [args[2], args[3]]]
+            end
       end
 
       def sdk

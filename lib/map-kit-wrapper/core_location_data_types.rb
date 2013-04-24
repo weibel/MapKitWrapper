@@ -6,7 +6,7 @@ module CoreLocation
     ##
     # Ruby wrapper for CLLocationCoordinate2D
     class LocationCoordinate
-      attr_accessor :latitude, :longitude
+      attr_reader :latitude, :longitude
 
       ##
       # LocationCoordinate.new(1,2)
@@ -16,23 +16,31 @@ module CoreLocation
       # LocationCoordinate.new(CLLocationCoordinate2D)
       def initialize(*args)
         args.flatten!
-        case args.size
-          when 1
-            arg = args.first
-            if arg.is_a? Hash
-              latitude, longitude = arg[:latitude], arg[:longitude]
-            else
-              # For LocationCoordinate, CLLocationCoordinate2D
-              latitude, longitude = arg.latitude, arg.longitude
+        self.latitude, self.longitude =
+            case args.size
+              when 1
+                arg = args.first
+                if arg.is_a? Hash
+                  [arg[:latitude], arg[:longitude]]
+                else
+                  # For LocationCoordinate, CLLocationCoordinate2D
+                  [arg.latitude, arg.longitude]
+                end
+              when 2
+                [args[0], args[1]]
             end
-          when 2
-            latitude, longitude = args[0], args[1]
-        end
-        @latitude, @longitude = latitude.to_f, longitude.to_f
       end
 
       def sdk
         CLLocationCoordinate2DMake(@latitude, @longitude)
+      end
+
+      def latitude=(latitude)
+        @latitude = latitude.to_f
+      end
+
+      def longitude=(longitude)
+        @longitude = longitude.to_f
       end
 
       def to_a
