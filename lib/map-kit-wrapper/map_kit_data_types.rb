@@ -165,6 +165,7 @@ module MapKit
       # MapSize.new([10,12])
       # MapSize.new({:width => 10, :height => 12})
       # MapSize.new(MKMapSize)
+      # MapSize.new(MapSize)
       def initialize(*args)
         args.flatten!
         self.width, self.height =
@@ -216,11 +217,19 @@ module MapKit
       # MapRect.new({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
       # MapRect.new(MapPoint, MapSize)
       # MapRect.new(MKMapPoint, MKMapSize)
+      # MapRect.new(MapRect)
+      # MapRect.new(MKMapRect)
       def initialize(*args)
         self.origin, self.size =
             case args.size
               when 1
-                [args[0][:origin], args[0][:size]]
+                arg = args[0]
+                case arg
+                  when Hash
+                    [arg[:origin], arg[:size]]
+                  else
+                    [arg.origin, arg.size]
+                end
               when 2
                 [args[0], args[1]]
               when 4

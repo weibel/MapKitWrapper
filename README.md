@@ -228,6 +228,7 @@ MapPoint.new(50, 45)
 MapPoint.new([50, 45])
 MapPoint.new({:x => 50, :y => 45})
 MapPoint.new(MKMapPoint)
+MapPoint.new(MapPoint)
 ```
 
 Methods on `MapPoint`
@@ -256,6 +257,7 @@ MapSize.new(10, 12)
 MapSize.new([10, 12])
 MapSize.new({:width => 50, :height => 45})
 MapSize.new(MKMapSize)
+MapSize.new(MapSize)
 ```
 
 Methods on `MapSize`
@@ -285,6 +287,8 @@ MapRect.new([x, y], [width, height])
 MapRect.new({:origin => {:x => 2, :y => 3}, :size => {:width => 10, :height => 12}})
 MapRect.new(MapPoint, MapSize)
 MapRect.new(MKMapPoint, MKMapSize)
+MapRect.new(MapRect)
+MapRect.new(MKMapRect)
 ```
 
 Methods on `MapRect`

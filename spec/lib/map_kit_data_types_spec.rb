@@ -172,7 +172,9 @@ describe 'MapKitDataTypes' do
       o_3 = MapKit::DataTypes::MapRect.new(mp, ms)
       o_4 = MapKit::DataTypes::MapRect.new(MKMapPointMake(5, 8), MKMapSizeMake(6, 9))
       o_5 = MapKit::DataTypes::MapRect.new({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
-      @array = [o_1, o_2, o_3, o_4, o_5]
+      o_6 = MapKit::DataTypes::MapRect.new(o_5)
+      o_7 = MapKit::DataTypes::MapRect.new(o_5.sdk)
+      @array = [o_1, o_2, o_3, o_4, o_5, o_6, o_7]
     end
 
     it 'should return the origin' do
