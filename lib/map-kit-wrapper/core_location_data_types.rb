@@ -15,7 +15,6 @@ module CoreLocation
       # LocationCoordinate.new(LocationCoordinate)
       # LocationCoordinate.new(CLLocationCoordinate2D)
       def initialize(*args)
-        @latitude, @longitude = nil, nil
         args.flatten!
         case args.size
           when 1
