@@ -143,7 +143,7 @@ module MapKit
     ##
     # Wrapper for MKMapSize
     class MapSize
-      attr_reader :width, :height
+      attr_accessor :width, :height
       ##
       # MapSize.new(10,12)
       # MapSize.new([10,12])
