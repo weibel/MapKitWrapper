@@ -8,7 +8,7 @@ module MapKit
     ##
     # Wrapper for MKCoordinateSpan
     class CoordinateSpan
-      attr_reader :sdk
+      attr_accessor :latitude_delta, :longitude_delta
       ##
       # CoordinateSpan.new(1,2)
       # CoordinateSpan.new([1,2])
@@ -22,33 +22,29 @@ module MapKit
             arg = args.first
             case arg
               when MKCoordinateSpan
-                latitudedelta, longitudedelta = arg.latitudeDelta, arg.longitudeDelta
+                latitude_delta, longitude_delta = arg.latitudeDelta, arg.longitudeDelta
               when CoordinateSpan
-                latitudedelta, longitudedelta = arg.latitude_delta, arg.longitude_delta
+                latitude_delta, longitude_delta = arg.latitude_delta, arg.longitude_delta
               when Hash
-                latitudedelta, longitudedelta = arg[:latitude_delta], arg[:longitude_delta]
+                latitude_delta, longitude_delta = arg[:latitude_delta], arg[:longitude_delta]
             end
           when 2
-            latitudedelta, longitudedelta = args[0], args[1]
+            latitude_delta, longitude_delta = args[0], args[1]
         end
-        @sdk = MKCoordinateSpanMake(latitudedelta, longitudedelta)
+        @latitude_delta, @longitude_delta = latitude_delta.to_f, longitude_delta.to_f
         self
       end
 
-      def latitude_delta
-        @sdk.latitudeDelta
-      end
-
-      def longitude_delta
-        @sdk.longitudeDelta
+      def sdk
+        MKCoordinateSpanMake(@latitude_delta, @longitude_delta)
       end
 
       def to_a
-        [latitude_delta, longitude_delta]
+        [@latitude_delta, @longitude_delta]
       end
 
       def to_h
-        {:latitude_delta => latitude_delta, :longitude_delta => longitude_delta}
+        {:latitude_delta => @latitude_delta, :longitude_delta => @longitude_delta}
       end
 
       def to_s
@@ -59,7 +55,7 @@ module MapKit
     # Wrapper for MKCoordinateRegion
     class CoordinateRegion
       include CoreLocation::DataTypes
-      attr_reader :sdk
+      attr_accessor :center, :span
       ##
       # CoordinateRegion.new(CoordinateRegion)
       # CoordinateRegion.new(MKCoordinateRegion)
@@ -80,25 +76,25 @@ module MapKit
           when 2
             center, span = args[0], args[1]
         end
-        @sdk = MKCoordinateRegionMake(LocationCoordinate.new(center).sdk, CoordinateSpan.new(span).sdk)
+        @center, @span = LocationCoordinate.new(center), CoordinateSpan.new(span)
       end
 
-      def center
-        LocationCoordinate.new(@sdk.center)
-      end
-
-      def span
-        CoordinateSpan.new(@sdk.span)
+      def sdk
+        MKCoordinateRegionMake(@center.sdk, @span.sdk)
       end
 
       def to_h
-        {:center => center.to_h, :span => span.to_h}
+        {:center => @center.to_h, :span => @span.to_h}
+      end
+
+      def to_s
+        to_h.to_s
       end
     end
     ##
     # Wrapper for MKMapPoint
     class MapPoint
-      attr_reader :sdk
+      attr_accessor :x, :y
       ##
       # MapPoint.new(50,45)
       # MapPoint.new([50,45])
@@ -111,30 +107,25 @@ module MapKit
             arg = args[0]
             case arg
               when Hash
-                x, y = arg[:x], arg[:y]
+                @x, @y = arg[:x], arg[:y]
               else
-                x, y = arg.x, arg.y
+                @x, @y = arg.x, arg.y
             end
           when 2
-            x, y = args[0], args[1]
+            @x, @y = args[0], args[1]
         end
-        @sdk = MKMapPointMake(x, y)
       end
 
-      def x
-        @sdk.x
-      end
-
-      def y
-        @sdk.y
+      def sdk
+        MKMapPointMake(@x, @y)
       end
 
       def to_a
-        [x, y]
+        [@x, @y]
       end
 
       def to_h
-        {:x => x, :y => y}
+        {:x => @x, :y => @y}
       end
 
       def to_s
@@ -144,7 +135,7 @@ module MapKit
     ##
     # Wrapper for MKMapSize
     class MapSize
-      attr_reader :sdk
+      attr_reader :width, :height
       ##
       # MapSize.new(10,12)
       # MapSize.new([10,12])
@@ -157,30 +148,25 @@ module MapKit
             arg = args[0]
             case arg
               when Hash
-                width, height = arg[:width], arg[:height]
+                @width, @height = arg[:width], arg[:height]
               else
-                width, height = arg.width, arg.height
+                @width, @height = arg.width, arg.height
             end
           when 2
-            width, height = args[0], args[1]
+            @width, @height = args[0], args[1]
         end
-        @sdk = MKMapSizeMake(width, height)
       end
 
-      def width
-        @sdk.width
-      end
-
-      def height
-        @sdk.height
+      def sdk
+        MKMapSizeMake(@width, @height)
       end
 
       def to_a
-        [width, height]
+        [@width, @height]
       end
 
       def to_h
-        {:width => width, :height => height}
+        {:width => @width, :height => @height}
       end
 
       def to_s
@@ -190,7 +176,7 @@ module MapKit
     ##
     # Wrapper for MKMapRect
     class MapRect
-      attr_reader :sdk
+      attr_reader :origin, :size
       ##
       # MapRect.new(x, y, width, height)
       # MapRect.new([x, y], [width, height])
@@ -206,20 +192,15 @@ module MapKit
           when 4
             origin, size = [args[0], args[1]], [args[2], args[3]]
         end
-        origin, size = MapPoint.new(origin), MapSize.new(size)
-        @sdk = MKMapRectMake(origin.x, origin.y, size.width, size.height)
+        @origin, @size = MapPoint.new(origin), MapSize.new(size)
       end
 
-      def origin
-        MapPoint.new(@sdk.origin)
-      end
-
-      def size
-        MapSize.new(@sdk.size)
+      def sdk
+        MKMapRectMake(@origin.x, @origin.y, @size.width, @size.height)
       end
 
       def to_h
-        {:origin => origin.to_h, :size => size.to_h}
+        {:origin => @origin.to_h, :size => @size.to_h}
       end
 
       def to_s
