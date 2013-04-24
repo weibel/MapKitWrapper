@@ -80,8 +80,7 @@ module MapKit
                 center, span = arg.center, arg.span
             end
           when 2
-            center = args[0]
-            span = args[1]
+            center, span = args[0], args[1]
         end
         @sdk = MKCoordinateRegionMake(LocationCoordinate.new(center).sdk, CoordinateSpan.new(span).sdk)
       end
