@@ -26,6 +26,12 @@ describe 'MapKitDataTypes' do
       end
     end
 
+    it 'should return a hash' do
+      @array.each do |o|
+        o.to_h.should.equal({:latitude_delta => 5.0, :longitude_delta => 8.0})
+      end
+    end
+
     it 'should contain a MKCoordinateSpan' do
       @array.each do |o|
         o.sdk.is_a?(MKCoordinateSpan).should.equal true
@@ -64,7 +70,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return a hash' do
       @array.each do |o|
-        o.to_h.should.equal({:center => [5, 8], :span => [6, 9]})
+        o.to_h.should.equal({:center => {:latitude => 5.0, :longitude => 8.0}, :span => {:latitude_delta => 6.0, :longitude_delta => 9.0}})
       end
     end
 
@@ -101,6 +107,12 @@ describe 'MapKitDataTypes' do
       end
     end
 
+    it 'should return a hash' do
+      @array.each do |o|
+        o.to_h.should.equal({:x => 5.0, :y => 8.0})
+      end
+    end
+
     it 'should contain a MKMapPoint' do
       @array.each do |o|
         o.sdk.is_a?(MKMapPoint).should.equal true
@@ -131,6 +143,12 @@ describe 'MapKitDataTypes' do
     it 'should return an array' do
       @array.each do |o|
         o.to_a.should.equal [5, 8]
+      end
+    end
+
+    it 'should return a hash' do
+      @array.each do |o|
+        o.to_h.should.equal({:width => 5.0, :height => 8.0})
       end
     end
 
@@ -170,7 +188,7 @@ describe 'MapKitDataTypes' do
 
     it 'should return a hash' do
       @array.each do |o|
-        o.to_h.should.equal({:origin => [5, 8], :size => [6, 9]})
+        o.to_h.should.equal({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
       end
     end
 

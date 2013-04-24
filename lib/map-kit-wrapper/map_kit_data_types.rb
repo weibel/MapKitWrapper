@@ -42,6 +42,14 @@ module MapKit
       def to_a
         [latitude_delta, longitude_delta]
       end
+
+      def to_h
+        {:latitude_delta => latitude_delta, :longitude_delta => longitude_delta}
+      end
+
+      def to_s
+        to_h.to_s
+      end
     end
     ##
     # Wrapper for MKCoordinateRegion
@@ -77,7 +85,7 @@ module MapKit
       end
 
       def to_h
-        {:center => center.to_a, :span => span.to_a}
+        {:center => center.to_h, :span => span.to_h}
       end
     end
     ##
@@ -108,6 +116,14 @@ module MapKit
       def to_a
         [x, y]
       end
+
+      def to_h
+        {:x => x, :y => y}
+      end
+
+      def to_s
+        to_h.to_s
+      end
     end
     ##
     # Wrapper for MKMapSize
@@ -136,6 +152,14 @@ module MapKit
 
       def to_a
         [width, height]
+      end
+
+      def to_h
+        {:width => width, :height => height}
+      end
+
+      def to_s
+        to_h.to_s
       end
     end
     ##
@@ -167,7 +191,7 @@ module MapKit
       end
 
       def to_h
-        {:origin => origin.to_a, :size => size.to_a}
+        {:origin => origin.to_h, :size => size.to_h}
       end
     end
   end
