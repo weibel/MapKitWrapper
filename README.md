@@ -183,6 +183,8 @@ Methods on `CoordinateSpan`
 => 2
 >> cs.to_a
 => [1, 2]
+>> cs.to_h
+=> {:latitude_delta => 1, :longitude_delta => 2}
 >> cs.sdk
 => MKCoordinateSpan
 ```
@@ -209,7 +211,7 @@ Methods on `CoordinateRegion`
 >> cs.region
 => CoordinateSpan([3.1, 5.1])
 >> cs.to_h
-=> {:center => [56, 10.6], :span => [3.1, 5.1]}
+=> {:center => {:latitude => 56, :longitude => 10.6}, :span => {:latitude_delta => 3.1, :longitude_delta => 5.1}}
 >> cs.sdk
 => MKCoordinateRegion
 ```
@@ -235,6 +237,8 @@ Methods on `MapPoint`
 => 45
 >> mp.to_a
 => [50, 45]
+>> mp.to_h
+=> {:x => 50, :y => 45}
 >> mp.sdk
 => MKMapPoint
 ```
@@ -260,6 +264,8 @@ Methods on `MapSize`
 => 12
 >> ms.to_a
 => [50, 45]
+>> ms.to_h
+=> {:width => 50, :height => 45}
 >> ms.sdk
 => MKMapSize
 ```
@@ -285,7 +291,7 @@ Methods on `MapRect`
 >> mr.size
 => MapSize([10, 12])
 >> mr.to_h
-=> {:origin => [2, 3], :size => [10, 12]}
+=> {:origin => {:x => 2, :y => 3}, :size => {:width => 10, :height => 12}}
 >> mr.sdk
 => MKMapRect
 ```
