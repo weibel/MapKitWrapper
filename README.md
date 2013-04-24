@@ -199,9 +199,9 @@ The `CoordinateRegion` initializer takes a variety of argument types
 CoordinateRegion.new(CoordinateRegion)
 CoordinateRegion.new(MKCoordinateRegion)
 CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-CoordinateRegion.new([56, 10.6], [3.1, 3.1])
 CoordinateRegion.new({:center => {:latitude => 56, :longitude => 10.6}, :span => {:latitude_delta => 3.1, :longitude_delta => 5.1}})
 CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
+CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
 ```
 
 Methods on `CoordinateRegion`
