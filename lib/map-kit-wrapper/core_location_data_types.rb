@@ -17,16 +17,17 @@ module CoreLocation
       def initialize(*args)
         latitude, longitude = nil, nil
         args.flatten!
-        if args.size == 1
-          arg = args.first
-          if arg.is_a? Hash
-            latitude, longitude = arg[:latitude], arg[:longitude]
-          else
-            # For LocationCoordinate, CLLocationCoordinate2D
-            latitude, longitude = arg.latitude, arg.longitude
-          end
-        elsif args.size == 2
-          latitude, longitude = args[0], args[1]
+        case args.size
+          when 1
+            arg = args.first
+            if arg.is_a? Hash
+              latitude, longitude = arg[:latitude], arg[:longitude]
+            else
+              # For LocationCoordinate, CLLocationCoordinate2D
+              latitude, longitude = arg.latitude, arg.longitude
+            end
+          when 2
+            latitude, longitude = args[0], args[1]
         end
         @sdk = CLLocationCoordinate2DMake(latitude, longitude)
         self

@@ -169,6 +169,7 @@ The `CoordinateSpan` initializer takes a variety of argument types
 ```ruby
 CoordinateSpan.new(1, 2)
 CoordinateSpan.new([1, 2])
+CoordinateSpan.new({:latitude_delta => 1, :longitude_delta => 2})
 CoordinateSpan.new(CoordinateSpan)
 CoordinateSpan.new(MKCoordinateSpan)
 ```
@@ -198,7 +199,8 @@ The `CoordinateRegion` initializer takes a variety of argument types
 CoordinateRegion.new(CoordinateRegion)
 CoordinateRegion.new(MKCoordinateRegion)
 CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
+CoordinateRegion.new([56, 10.6], [3.1, 3.1])
+CoordinateRegion.new({:center => {:latitude => 56, :longitude => 10.6}, :span => {:latitude_delta => 3.1, :longitude_delta => 5.1}})
 CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
 ```
 
@@ -224,6 +226,7 @@ The `MapPoint` initializer takes a variety of argument types
 ```ruby
 MapPoint.new(50, 45)
 MapPoint.new([50, 45])
+MapPoint.new({:x => 50, :y => 45})
 MapPoint.new(MKMapPoint)
 ```
 

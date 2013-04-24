@@ -5,7 +5,8 @@ describe 'MapKitDataTypes' do
       o_2 = MapKit::DataTypes::CoordinateSpan.new([5, 8])
       o_3 = MapKit::DataTypes::CoordinateSpan.new(MKCoordinateSpanMake(5, 8))
       o_4 = MapKit::DataTypes::CoordinateSpan.new(o_1)
-      @array = [o_1, o_2, o_3, o_4]
+      o_5 = MapKit::DataTypes::CoordinateSpan.new({:latitude_delta => 5, :longitude_delta => 8})
+      @array = [o_1, o_2, o_3, o_4, o_5]
     end
 
     it 'should return the latitude delta' do
@@ -49,7 +50,8 @@ describe 'MapKitDataTypes' do
       o_3 = MapKit::DataTypes::CoordinateRegion.new(CLLocationCoordinate2DMake(5, 8), MKCoordinateSpanMake(6, 9))
       o_4 = MapKit::DataTypes::CoordinateRegion.new(mkcr)
       o_5 = MapKit::DataTypes::CoordinateRegion.new(o_1)
-      @array = [o_1, o_2, o_3, o_4, o_5]
+      o_6 = MapKit::DataTypes::CoordinateRegion.new({:center => {:latitude => 5.0, :longitude => 8.0}, :span => {:latitude_delta => 6.0, :longitude_delta => 9.0}})
+      @array = [o_1, o_2, o_3, o_4, o_5, o_6]
     end
 
     it 'should return the center' do
@@ -86,7 +88,8 @@ describe 'MapKitDataTypes' do
       o_1 = MapKit::DataTypes::MapPoint.new(5, 8)
       o_2 = MapKit::DataTypes::MapPoint.new([5, 8])
       o_3 = MapKit::DataTypes::MapPoint.new(MKMapPointMake(5, 8))
-      @array = [o_1, o_2, o_3]
+      o_4 = MapKit::DataTypes::MapPoint.new({:x => 5.0, :y => 8.0})
+      @array = [o_1, o_2, o_3, o_4]
     end
 
     it 'should return the x' do
@@ -125,7 +128,8 @@ describe 'MapKitDataTypes' do
       o_1 = MapKit::DataTypes::MapSize.new(5, 8)
       o_2 = MapKit::DataTypes::MapSize.new([5, 8])
       o_3 = MapKit::DataTypes::MapSize.new(MKMapSizeMake(5, 8))
-      @array = [o_1, o_2, o_3]
+      o_4 = MapKit::DataTypes::MapSize.new({:width => 5.0, :height => 8.0})
+      @array = [o_1, o_2, o_3, o_4]
     end
 
     it 'should return the width' do
@@ -167,7 +171,8 @@ describe 'MapKitDataTypes' do
       o_2 = MapKit::DataTypes::MapRect.new([5, 8], [6, 9])
       o_3 = MapKit::DataTypes::MapRect.new(mp, ms)
       o_4 = MapKit::DataTypes::MapRect.new(MKMapPointMake(5, 8), MKMapSizeMake(6, 9))
-      @array = [o_1, o_2, o_3, o_4]
+      o_5 = MapKit::DataTypes::MapRect.new({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
+      @array = [o_1, o_2, o_3, o_4, o_5]
     end
 
     it 'should return the origin' do
