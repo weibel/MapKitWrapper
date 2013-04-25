@@ -1,6 +1,7 @@
 module MapKit
   ##
   # Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
+  #
   # More here http://troybrant.net/blog/2010/01/mkmapview-and-zoom-levels-a-visual-guide/
   module ZoomLevel
     include Math
@@ -149,7 +150,7 @@ module MapKit
     ##
     # Get the current zoom level
     def zoom_level
-      region = self.region.sdk
+      region = self.region.api
       center_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude)
       top_left_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude - region.span.longitudeDelta / 2)
 
@@ -164,7 +165,7 @@ module MapKit
     ##
     # Set the current zoom level
     def set_zoom_level(zoom_level, animated = false)
-      self.set_center_coordinates(self.region.sdk.center, zoom_level, animated)
+      self.set_center_coordinates(self.region.api.center, zoom_level, animated)
     end
 
   end

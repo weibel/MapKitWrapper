@@ -35,7 +35,7 @@ describe 'MapKitDataTypes' do
 
     it 'should contain a MKCoordinateSpan' do
       @array.each do |o|
-        o.sdk.is_a?(MKCoordinateSpan).should.equal true
+        o.api.is_a?(MKCoordinateSpan).should.equal true
       end
     end
   end
@@ -78,7 +78,7 @@ describe 'MapKitDataTypes' do
 
     it 'should contain a MKCoordinateRegion' do
       @array.each do |o|
-        o.sdk.is_a?(MKCoordinateRegion).should.equal true
+        o.api.is_a?(MKCoordinateRegion).should.equal true
       end
     end
   end
@@ -118,7 +118,7 @@ describe 'MapKitDataTypes' do
 
     it 'should contain a MKMapPoint' do
       @array.each do |o|
-        o.sdk.is_a?(MKMapPoint).should.equal true
+        o.api.is_a?(MKMapPoint).should.equal true
       end
     end
   end
@@ -158,7 +158,7 @@ describe 'MapKitDataTypes' do
 
     it 'should contain a MKMapSize' do
       @array.each do |o|
-        o.sdk.is_a?(MKMapSize).should.equal true
+        o.api.is_a?(MKMapSize).should.equal true
       end
     end
   end
@@ -173,7 +173,7 @@ describe 'MapKitDataTypes' do
       o_4 = MapKit::DataTypes::MapRect.new(MKMapPointMake(5, 8), MKMapSizeMake(6, 9))
       o_5 = MapKit::DataTypes::MapRect.new({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
       o_6 = MapKit::DataTypes::MapRect.new(o_5)
-      o_7 = MapKit::DataTypes::MapRect.new(o_5.sdk)
+      o_7 = MapKit::DataTypes::MapRect.new(o_5.api)
       @array = [o_1, o_2, o_3, o_4, o_5, o_6, o_7]
     end
 
@@ -201,7 +201,7 @@ describe 'MapKitDataTypes' do
 
     it 'should contain a MKMapRect' do
       @array.each do |o|
-        o.sdk.is_a?(MKMapRect).should.equal true
+        o.api.is_a?(MKMapRect).should.equal true
       end
     end
   end

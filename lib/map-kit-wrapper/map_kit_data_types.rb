@@ -36,7 +36,9 @@ module MapKit
             end
       end
 
-      def sdk
+      ##
+      # Returns the wrapped iOS MKCoordinateSpan object
+      def api
         MKCoordinateSpanMake(@latitude_delta, @longitude_delta)
       end
 
@@ -94,9 +96,9 @@ module MapKit
       end
 
       ##
-      # Returns the wrapped MKCoordinateRegion struct
-      def sdk
-        MKCoordinateRegionMake(@center.sdk, @span.sdk)
+      # Returns the wrapped iOS MKCoordinateRegion object
+      def api
+        MKCoordinateRegionMake(@center.api, @span.api)
       end
 
       ##
@@ -146,7 +148,9 @@ module MapKit
             end
       end
 
-      def sdk
+      ##
+      # Returns the wrapped iOS MKMapPoint object
+      def api
         MKMapPointMake(@x, @y)
       end
 
@@ -199,7 +203,9 @@ module MapKit
             end
       end
 
-      def sdk
+      ##
+      # Returns the wrapped iOS MKMapSize object
+      def api
         MKMapSizeMake(@width, @height)
       end
 
@@ -255,7 +261,9 @@ module MapKit
             end
       end
 
-      def sdk
+      ##
+      # Returns the wrapped iOS MKMapRect object
+      def api
         MKMapRectMake(@origin.x, @origin.y, @size.width, @size.height)
       end
 

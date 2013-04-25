@@ -54,7 +54,7 @@ describe 'LocationCoordinate' do
 
   it 'should contain a CLLocationCoordinate2D' do
     @array.each do |lc|
-      lc.sdk.is_a?(CLLocationCoordinate2D).should.equal true
+      lc.api.is_a?(CLLocationCoordinate2D).should.equal true
     end
   end
 end

@@ -33,7 +33,9 @@ module CoreLocation
             end
       end
 
-      def sdk
+      ##
+      # Returns the wrapped iOS CLLocationCoordinate2D object
+      def api
         CLLocationCoordinate2DMake(@latitude, @longitude)
       end
 

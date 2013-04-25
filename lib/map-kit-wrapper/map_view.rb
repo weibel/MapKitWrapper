@@ -75,9 +75,9 @@ module MapKit
     def region=(args)
       case args
         when Hash
-          self.setRegion(CoordinateRegion.new(args[:region]).sdk, animated: args[:animated])
+          self.setRegion(CoordinateRegion.new(args[:region]).api, animated: args[:animated])
         else
-          self.setRegion(CoordinateRegion.new(args).sdk, animated: false)
+          self.setRegion(CoordinateRegion.new(args).api, animated: false)
       end
     end
 
