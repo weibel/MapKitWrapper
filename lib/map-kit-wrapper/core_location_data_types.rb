@@ -9,11 +9,13 @@ module CoreLocation
       attr_reader :latitude, :longitude
 
       ##
-      # LocationCoordinate.new(1,2)
-      # LocationCoordinate.new([1,2])
-      # LocationCoordinate.new({:latitude => 1, :longitude => 2})
-      # LocationCoordinate.new(LocationCoordinate)
-      # LocationCoordinate.new(CLLocationCoordinate2D)
+      # The initializer takes a variety of arguments
+      #
+      #    LocationCoordinate.new(1,2)
+      #    LocationCoordinate.new([1,2])
+      #    LocationCoordinate.new({:latitude => 1, :longitude => 2})
+      #    LocationCoordinate.new(LocationCoordinate)
+      #    LocationCoordinate.new(CLLocationCoordinate2D)
       def initialize(*args)
         args.flatten!
         self.latitude, self.longitude =

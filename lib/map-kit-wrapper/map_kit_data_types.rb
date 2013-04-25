@@ -10,11 +10,13 @@ module MapKit
     class CoordinateSpan
       attr_reader :latitude_delta, :longitude_delta
       ##
-      # CoordinateSpan.new(1,2)
-      # CoordinateSpan.new([1,2])
-      # CoordinateSpan.new({:latitude_delta => 1, :longitude_delta => 2})
-      # CoordinateSpan.new(CoordinateSpan)
-      # CoordinateSpan.new(MKCoordinateSpan)
+      # The initializer takes a variety of arguments
+      #
+      #    CoordinateSpan.new(1,2)
+      #    CoordinateSpan.new([1,2])
+      #    CoordinateSpan.new({:latitude_delta => 1, :longitude_delta => 2})
+      #    CoordinateSpan.new(CoordinateSpan)
+      #    CoordinateSpan.new(MKCoordinateSpan)
       def initialize(*args)
         args.flatten!
         self.latitude_delta, self.longitude_delta =
@@ -58,18 +60,23 @@ module MapKit
         to_h.to_s
       end
     end
+
     ##
     # Wrapper for MKCoordinateRegion
     class CoordinateRegion
       include CoreLocation::DataTypes
       attr_reader :center, :span
+
       ##
-      # CoordinateRegion.new(CoordinateRegion)
-      # CoordinateRegion.new(MKCoordinateRegion)
-      # CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-      # CoordinateRegion.new({:center => {:latitude => 56, :longitude => 10.6}, :span => {:latitude_delta => 3.1, :longitude_delta => 3.1}}
-      # CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
-      # CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
+      # The initializer takes a variety of arguments
+      #
+      #    CoordinateRegion.new(CoordinateRegion)
+      #    CoordinateRegion.new(MKCoordinateRegion)
+      #    CoordinateRegion.new([56, 10.6], [3.1, 3.1])
+      #    CoordinateRegion.new({:center => {:latitude => 56, :longitude => 10.6},
+      #                          :span => {:latitude_delta => 3.1, :longitude_delta => 3.1}}
+      #    CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
+      #    CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
       def initialize(*args)
         self.center, self.span =
             case args.size
@@ -86,10 +93,15 @@ module MapKit
             end
       end
 
+      ##
+      # Returns the wrapped MKCoordinateRegion struct
       def sdk
         MKCoordinateRegionMake(@center.sdk, @span.sdk)
       end
 
+      ##
+      # Assigns a LocationCoordinate to center.
+      # Accepts a variety of arguments
       def center=(center)
         @center = LocationCoordinate.new(center)
       end
@@ -111,10 +123,12 @@ module MapKit
     class MapPoint
       attr_reader :x, :y
       ##
-      # MapPoint.new(50,45)
-      # MapPoint.new([50,45])
-      # MapPoint.new({:x => 50, :y => 45})
-      # MapPoint.new(MKMapPoint)
+      # The initializer takes a variety of arguments
+      #
+      #    MapPoint.new(50,45)
+      #    MapPoint.new([50,45])
+      #    MapPoint.new({:x => 50, :y => 45})
+      #    MapPoint.new(MKMapPoint)
       def initialize(*args)
         args.flatten!
         self.x, self.y =
@@ -161,11 +175,13 @@ module MapKit
     class MapSize
       attr_reader :width, :height
       ##
-      # MapSize.new(10,12)
-      # MapSize.new([10,12])
-      # MapSize.new({:width => 10, :height => 12})
-      # MapSize.new(MKMapSize)
-      # MapSize.new(MapSize)
+      # The initializer takes a variety of arguments
+      #
+      #    MapSize.new(10,12)
+      #    MapSize.new([10,12])
+      #    MapSize.new({:width => 10, :height => 12})
+      #    MapSize.new(MKMapSize)
+      #    MapSize.new(MapSize)
       def initialize(*args)
         args.flatten!
         self.width, self.height =
@@ -212,13 +228,15 @@ module MapKit
     class MapRect
       attr_reader :origin, :size
       ##
-      # MapRect.new(x, y, width, height)
-      # MapRect.new([x, y], [width, height])
-      # MapRect.new({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
-      # MapRect.new(MapPoint, MapSize)
-      # MapRect.new(MKMapPoint, MKMapSize)
-      # MapRect.new(MapRect)
-      # MapRect.new(MKMapRect)
+      # The initializer takes a variety of arguments
+      #
+      #    MapRect.new(x, y, width, height)
+      #    MapRect.new([x, y], [width, height])
+      #    MapRect.new({:origin => {:x => 5.0, :y => 8.0}, :size => {:width => 6.0, :height => 9.0}})
+      #    MapRect.new(MapPoint, MapSize)
+      #    MapRect.new(MKMapPoint, MKMapSize)
+      #    MapRect.new(MapRect)
+      #    MapRect.new(MKMapRect)
       def initialize(*args)
         self.origin, self.size =
             case args.size

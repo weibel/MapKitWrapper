@@ -69,8 +69,9 @@ module MapKit
 
     ##
     # Set the maps region
-    # region = CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-    # region = {:region => CoordinateRegion.new([56, 10.6], [3.1, 3.1]), :animated => false}
+    #
+    #    region = CoordinateRegion.new([56, 10.6], [3.1, 3.1])
+    #    region = {:region => CoordinateRegion.new([56, 10.6], [3.1, 3.1]), :animated => false}
     def region=(args)
       case args
         when Hash

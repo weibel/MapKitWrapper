@@ -129,8 +129,6 @@ module MapKit
       base.extend(ClassMethods)
     end
 
-    # Public methods
-
     def set_center_coordinates(center_coordinate, zoom_level, animated = false)
       # clamp large numbers to 18
       zoom_level = [zoom_level, 18].min
@@ -150,7 +148,6 @@ module MapKit
 
     ##
     # Get the current zoom level
-
     def zoom_level
       region = self.region.sdk
       center_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude)
@@ -166,7 +163,6 @@ module MapKit
 
     ##
     # Set the current zoom level
-
     def set_zoom_level(zoom_level, animated = false)
       self.set_center_coordinates(self.region.sdk.center, zoom_level, animated)
     end
