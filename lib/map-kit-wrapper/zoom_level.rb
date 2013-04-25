@@ -1,22 +1,51 @@
 module MapKit
+
   ##
   # Ruby adaption of http://troybrant.net/blog/2010/01/set-the-zoom-level-of-an-mkmapview/
   #
   # More here http://troybrant.net/blog/2010/01/mkmapview-and-zoom-levels-a-visual-guide/
+  #
   module ZoomLevel
     include Math
+
+    ##
+    # Total map width in pixels
+    #
     MERCATOR_OFFSET = 268435456.0
+
+    ##
+    # Map radius in pixels
+    #
     MERCATOR_RADIUS = MERCATOR_OFFSET / PI
 
     ##
     # Map conversion methods
+    #
     module ClassMethods
       include Math
 
+      ##
+      # Convert longitude to pixel space x
+      #
+      # * *Args*    :
+      #   - +longitude+ -> Int or Float
+      #
+      # * *Returns* :
+      #   - Pixel space x as Int
+      #
       def longitude_to_pixel_space_x(longitude)
         (MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * PI / 180.0).round
       end
 
+      ##
+      # Convert latitude to pixel space y
+      #
+      # * *Args*    :
+      #   - +latitude+ -> Int or Float
+      #
+      # * *Returns* :
+      #   - Pixel space y as Int
+      #
       def latitude_to_pixel_space_y(latitude)
         if latitude == 90.0
           0
@@ -27,14 +56,43 @@ module MapKit
         end
       end
 
+      ##
+      # Convert pixel space x to longitude
+      #
+      # * *Args*    :
+      #   - +pixel_x+ -> Int
+      #
+      # * *Returns* :
+      #   - Longitude as float
+      #
       def pixel_space_x_to_longitude(pixel_x)
         ((pixel_x.round - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / PI
       end
 
+      ##
+      # Convert pixel space y to latitude
+      #
+      # * *Args*    :
+      #   - +pixel_y+ -> Int
+      #
+      # * *Returns* :
+      #   - Latitude as float
+      #
       def pixel_space_y_to_latitude(pixel_y)
         (PI / 2.0 - 2.0 * atan(exp((pixel_y.round - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / PI
       end
 
+      ##
+      # Get the coordiante span for the given zoom level
+      #
+      # * *Args*    :
+      #   - +map_view+ -> A MKMapView
+      #   - +center_coordinates+ -> Coordinates as MKMapPoint
+      #   - +zoom_level+ -> Zoom level as Int
+      #
+      # * *Returns* :
+      #   - Span as MKCoordinateSpan
+      #
       def coordinate_span_with_map_view(map_view, center_coordinate, zoom_level)
         # convert center coordiate to pixel space
         center_pixel_x = self.longitude_to_pixel_space_x(center_coordinate.longitude)
@@ -68,8 +126,18 @@ module MapKit
       end
 
       ##
-      # KMapView cannot display tiles that cross the pole
+      # Get the coordiante region for the given zoom level
+      #
       # This would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do.
+      #
+      # * *Args*    :
+      #   - +map_view+ -> A MKMapView
+      #   - +center_coordinates+ -> Coordinates as MKMapPoint
+      #   - +zoom_level+ -> Zoom level as Int
+      #
+      # * *Returns* :
+      #   - Region as MKCoordinateRegion
+      #
       def coordinate_region_with_map_view(map_view, center_coordinate, zoom_level)
 
         # clamp lat/long values to appropriate ranges
@@ -126,10 +194,21 @@ module MapKit
       end
     end
 
+    ##
+    # Include class methods
+    #
     def self.included(base)
       base.extend(ClassMethods)
     end
 
+    ##
+    # Set the views center coordinates with a given zoom level
+    #
+    # * *Args*    :
+    #   - +center_coordinate+ -> A MKMapPoint
+    #   - +zoom_level+ -> Zoom level as Int
+    #   - +animated+ -> bool
+    #
     def set_center_coordinates(center_coordinate, zoom_level, animated = false)
       # clamp large numbers to 18
       zoom_level = [zoom_level, 18].min
@@ -142,13 +221,26 @@ module MapKit
       self.setRegion(region, animated: animated)
     end
 
+    ##
+    # Set the views latitude and longitude with a given zoom level
+    #
+    # * *Args*    :
+    #   - +latitude+ -> Float
+    #   - +longitude+ -> Float
+    #   - +zoom_level+ -> Zoom level as Int
+    #   - +animated+ -> bool
+    #
     def set_map_lat_lon(latitude, longitude, zoom_level, animated = false)
       coordinates = CLLocationCoordinate2DMake(latitude, longitude)
-      self.set_center_coordinates(coordinates, zoom_level, animated)
+      set_center_coordinates(coordinates, zoom_level, animated)
     end
 
     ##
     # Get the current zoom level
+    #
+    # * *Returns* :
+    #   - Zoom level as a Float
+    #
     def zoom_level
       region = self.region.api
       center_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude)
@@ -164,8 +256,13 @@ module MapKit
 
     ##
     # Set the current zoom level
+    #
+    # * *Args*    :
+    #   - +zoom_level+ -> Int or Float
+    #   - +animated+ -> Bool
+    #
     def set_zoom_level(zoom_level, animated = false)
-      self.set_center_coordinates(self.region.api.center, zoom_level, animated)
+      set_center_coordinates(self.region.api.center, zoom_level, animated)
     end
 
   end
