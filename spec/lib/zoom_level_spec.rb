@@ -6,26 +6,6 @@ describe 'ZoomLevel' do
     @map.region = MapKit::CoordinateRegion.new([56, 10.6], [3.1, 3.1])
   end
 
-  it 'should return longitude_to_pixel_space_x' do
-    MapKit::MapView.longitude_to_pixel_space_x(30).should.equal 313174699
-  end
-
-  it 'should return latitude_to_pixel_space_y' do
-    MapKit::MapView.latitude_to_pixel_space_y(90).should.equal 0
-    MapKit::MapView.latitude_to_pixel_space_y(-90).should.equal 536870912
-    MapKit::MapView.latitude_to_pixel_space_y(0).should.equal 268435456
-  end
-
-  it 'should return pixel_space_x_to_longitude' do
-    MapKit::MapView.pixel_space_x_to_longitude(313174699).should.equal 29.9999923706055 # 30
-  end
-
-  it 'should return pixel_space_y_to_latitude' do
-    MapKit::MapView.pixel_space_y_to_latitude(0).should.equal 85.0511169433594 # 90
-    MapKit::MapView.pixel_space_y_to_latitude(536870912).should.equal -85.0511169433594 # -90
-    MapKit::MapView.pixel_space_y_to_latitude(268435456).should.equal 0
-  end
-
   it 'should return coordinate_span_with_map_view' do
     span = MapKit::MapView.coordinate_span_with_map_view(@map, CLLocationCoordinate2DMake(56, 10), 2)
     span.latitudeDelta.should.equal 48.4522247314453

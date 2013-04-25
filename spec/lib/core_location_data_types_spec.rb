@@ -8,6 +8,16 @@ describe 'LocationCoordinate' do
     @array = [lc_1, lc_2, lc_3, lc_4, lc_5]
   end
 
+  it 'should return longitude_to_pixel_space_x' do
+    CoreLocation::DataTypes::LocationCoordinate.longitude_to_pixel_space_x(30).should.equal 313174699
+  end
+
+  it 'should return latitude_to_pixel_space_y' do
+    CoreLocation::DataTypes::LocationCoordinate.latitude_to_pixel_space_y(90).should.equal 0
+    CoreLocation::DataTypes::LocationCoordinate.latitude_to_pixel_space_y(-90).should.equal 536870912
+    CoreLocation::DataTypes::LocationCoordinate.latitude_to_pixel_space_y(0).should.equal 268435456
+  end
+
   it 'should return the latitude' do
     @array.each do |lc|
       lc.latitude.should.equal 5

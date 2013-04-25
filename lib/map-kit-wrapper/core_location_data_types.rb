@@ -1,3 +1,6 @@
+#= require base_data_types
+#= require map_kit_data_types
+
 ##
 # Wrappers for Core Location
 #
@@ -7,15 +10,18 @@ module CoreLocation
   # Wrappers for the Core Location Data Types
   # http://developer.apple.com/library/mac/#documentation/CoreLocation/Reference/CoreLocationDataTypesRef/Reference/reference.html
   module DataTypes
+    include BaseDataTypes
 
     ##
     # Ruby wrapper for CLLocationCoordinate2D
-    class LocationCoordinate
-
+    class LocationCoordinate < Vector
       ##
-      # Attribute reader
+      # Attribute aliases
       #
-      attr_reader :latitude, :longitude
+      alias :latitude :x
+      alias :longitude :y
+      alias :latitude= :x=
+      alias :longitude= :y=
 
       ##
       # Initializer for LocationCoordinate
@@ -49,37 +55,28 @@ module CoreLocation
       ##
       # Returns the wrapped iOS CLLocationCoordinate2D object
       def api
-        CLLocationCoordinate2DMake(@latitude, @longitude)
+        CLLocationCoordinate2DMake(latitude, longitude)
       end
 
       ##
-      # Setter for latitude
-      #
-      # * *Args*    :
-      #   - +latitude+ -> Int or Float
-      #
-      def latitude=(latitude)
-        @latitude = latitude.to_f
-      end
-
-      ##
-      # Setter for longitude
-      #
-      # * *Args*    :
-      #   - +longitude+ -> Int or Float
-      #
-      def longitude=(longitude)
-        @longitude = longitude.to_f
-      end
-
-      ##
-      # Get self as an Array
+      # Clamp coordinates to appropriate mercator values
       #
       # * *Returns* :
-      #   - <tt>[latitude, longitude]</tt>
+      #   - LocationCoordinate
       #
-      def to_a
-        [@latitude, @longitude]
+      def mercator_limit
+        LocationCoordinate.new([[-90.0, latitude].max, 90.0].min, longitude % 180.0)
+      end
+
+      ##
+      # Convert self to pixel space
+      #
+      # * *Returns* :
+      #   - MapKit::DataTypes::MapPoint
+      #
+      def to_pixel_space
+        MapKit::DataTypes::MapPoint.new(LocationCoordinate.longitude_to_pixel_space_x(longitude),
+                                        LocationCoordinate.latitude_to_pixel_space_y(latitude))
       end
 
       ##
@@ -89,17 +86,41 @@ module CoreLocation
       #   - <tt>{:latitude => latitude, :longitude => longitude}</tt>
       #
       def to_h
-        {:latitude => @latitude, :longitude => @longitude}
+        {:latitude => latitude, :longitude => longitude}
+      end
+
+      private
+
+      ##
+      # Convert longitude to pixel space x
+      #
+      # * *Args*    :
+      #   - +longitude+ -> Int or Float
+      #
+      # * *Returns* :
+      #   - Pixel space x as Int
+      #
+      def self.longitude_to_pixel_space_x(longitude)
+        (BaseDataTypes::Vector::MERCATOR_OFFSET + BaseDataTypes::Vector::MERCATOR_RADIUS * longitude * Math::PI / 180.0).round
       end
 
       ##
-      # Get self as a String
+      # Convert latitude to pixel space y
+      #
+      # * *Args*    :
+      #   - +latitude+ -> Int or Float
       #
       # * *Returns* :
-      #   - <tt>"{:latitude => latitude, :longitude => longitude}"</tt>
+      #   - Pixel space y as Int
       #
-      def to_s
-        to_h.to_s
+      def self.latitude_to_pixel_space_y(latitude)
+        if latitude == 90.0
+          0
+        elsif latitude == -90.0
+          BaseDataTypes::Vector::MERCATOR_OFFSET * 2
+        else
+          (BaseDataTypes::Vector::MERCATOR_OFFSET - BaseDataTypes::Vector::MERCATOR_RADIUS * Math.log((1 + Math.sin(latitude * Math::PI / 180.0)) / (1 - Math.sin(latitude * Math::PI / 180.0))) / 2.0).round
+        end
       end
     end
   end

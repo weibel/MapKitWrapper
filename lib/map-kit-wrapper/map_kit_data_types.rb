@@ -9,15 +9,19 @@ module MapKit
   # Wrappers for the Map Kit Data Types
   # http://developer.apple.com/library/ios/#documentation/MapKit/Reference/MapKitDataTypesReference/Reference/reference.html
   module DataTypes
+    include BaseDataTypes
 
     ##
     # Wrapper for MKCoordinateSpan
-    class CoordinateSpan
+    class CoordinateSpan < Vector
 
       ##
-      # Attribute reader
+      # Attribute aliases
       #
-      attr_reader :latitude_delta, :longitude_delta
+      alias :latitude_delta :x
+      alias :latitude_delta= :x=
+      alias :longitude_delta :y
+      alias :longitude_delta= :y=
 
       ##
       # Initializer for CoordinateSpan
@@ -56,37 +60,7 @@ module MapKit
       #   - A MKCoordinateSpan representation of self
       #
       def api
-        MKCoordinateSpanMake(@latitude_delta, @longitude_delta)
-      end
-
-      ##
-      # Setter for latitude_delta
-      #
-      # * *Args*    :
-      #   - +delta+ -> Int or Float
-      #
-      def latitude_delta=(delta)
-        @latitude_delta = delta.to_f
-      end
-
-      ##
-      # Setter for longitude_delta
-      #
-      # * *Args*    :
-      #   - +delta+ -> Int or Float
-      #
-      def longitude_delta=(delta)
-        @longitude_delta = delta.to_f
-      end
-
-      ##
-      # Get self as an Array
-      #
-      # * *Returns* :
-      #   - <tt>[latitude_delta, longitude_delta]</tt>
-      #
-      def to_a
-        [@latitude_delta, @longitude_delta]
+        MKCoordinateSpanMake(latitude_delta, longitude_delta)
       end
 
       ##
@@ -96,17 +70,7 @@ module MapKit
       #   - <tt>{:latitude_delta => latitude_delta, :longitude_delta => longitude_delta}</tt>
       #
       def to_h
-        {:latitude_delta => @latitude_delta, :longitude_delta => @longitude_delta}
-      end
-
-      ##
-      # Get self as a String
-      #
-      # * *Returns* :
-      #   - <tt>"{:latitude_delta => latitude_delta, :longitude_delta => longitude_delta}"</tt>
-      #
-      def to_s
-        to_h.to_s
+        {:latitude_delta => latitude_delta, :longitude_delta => longitude_delta}
       end
     end
 
@@ -129,8 +93,7 @@ module MapKit
       #    CoordinateRegion.new(CoordinateRegion)
       #    CoordinateRegion.new(MKCoordinateRegion)
       #    CoordinateRegion.new([56, 10.6], [3.1, 3.1])
-      #    CoordinateRegion.new({:center => {:latitude => 56, :longitude => 10.6},
-      #                          :span => {:latitude_delta => 3.1, :longitude_delta => 3.1}}
+      #    CoordinateRegion.new({:center => {:latitude => 56, :longitude => 10.6}, :span => {:latitude_delta => 3.1, :longitude_delta => 3.1}})
       #    CoordinateRegion.new(LocationCoordinate, CoordinateSpan)
       #    CoordinateRegion.new(CLLocationCoordinate2D, MKCoordinateSpan)
       #
@@ -203,12 +166,7 @@ module MapKit
 
     ##
     # Wrapper for MKMapPoint
-    class MapPoint
-
-      ##
-      # Attribute reader
-      #
-      attr_reader :x, :y
+    class MapPoint < Vector
 
       ##
       # Initializer for MapPoint
@@ -219,7 +177,9 @@ module MapKit
       #    MapPoint.new(50,45)
       #    MapPoint.new([50,45])
       #    MapPoint.new({:x => 50, :y => 45})
+      #    MapPoint.new(MapPoint)
       #    MapPoint.new(MKMapPoint)
+      #
       def initialize(*args)
         args.flatten!
         self.x, self.y =
@@ -244,68 +204,60 @@ module MapKit
       #   - A MKMapPoint representation of self
       #
       def api
-        MKMapPointMake(@x, @y)
+        MKMapPointMake(x, y)
       end
 
       ##
-      # Setter for x
+      # Convert self to location space
+      #
+      # * *Returns* :
+      #   - CoreLocation::LocationCoordinate
+      #
+      def to_location_space
+        CoreLocation::DataTypes::LocationCoordinate.new(MapPoint.pixel_space_x_to_longitude(x),
+                                                        MapPoint.pixel_space_y_to_latitude(y))
+      end
+
+      private
+
+      ##
+      # Convert pixel space x to longitude
       #
       # * *Args*    :
-      #   - +x+ -> Int or Float
+      #   - +pixel_x+ -> Int
       #
-      def x=(x)
-        @x = x.to_f
+      # * *Returns* :
+      #   - Longitude as float
+      #
+      def self.pixel_space_x_to_longitude(pixel_x)
+        ((pixel_x.round - BaseDataTypes::Vector::MERCATOR_OFFSET) / BaseDataTypes::Vector::MERCATOR_RADIUS) * 180.0 / Math::PI
       end
 
       ##
-      # Setter for y
+      # Convert pixel space y to latitude
       #
       # * *Args*    :
-      #   - +y+ -> Int or Float
-      #
-      def y=(y)
-        @y = y.to_f
-      end
-
-      ##
-      # Get self as an Array
+      #   - +pixel_y+ -> Int
       #
       # * *Returns* :
-      #   - <tt>[x, y]</tt>
+      #   - Latitude as float
       #
-      def to_a
-        [@x, @y]
-      end
-
-      ##
-      # Get self as a Hash
-      #
-      # * *Returns* :
-      #   - <tt>{:x => x, :y => y}</tt>
-      #
-      def to_h
-        {:x => @x, :y => @y}
-      end
-
-      ##
-      # Get self as a String
-      #
-      # * *Returns* :
-      #   - <tt>"{:x => x, :y => y}"</tt>
-      #
-      def to_s
-        to_h.to_s
+      def self.pixel_space_y_to_latitude(pixel_y)
+        (Math::PI / 2.0 - 2.0 * Math.atan(Math.exp((pixel_y.round - BaseDataTypes::Vector::MERCATOR_OFFSET) / BaseDataTypes::Vector::MERCATOR_RADIUS))) * 180.0 / Math::PI
       end
     end
 
     ##
     # Wrapper for MKMapSize
-    class MapSize
+    class MapSize < Vector
 
       ##
-      # Attribute reader
+      # Attribute aliases
       #
-      attr_reader :width, :height
+      alias :width :x
+      alias :width= :x=
+      alias :height :y
+      alias :height= :y=
 
       ##
       # Initializer for MapSize
@@ -343,37 +295,7 @@ module MapKit
       #   - A MKMapSize representation of self
       #
       def api
-        MKMapSizeMake(@width, @height)
-      end
-
-      ##
-      # Setter for width
-      #
-      # * *Args*    :
-      #   - +width+ -> Int or Float
-      #
-      def width=(width)
-        @width = width.to_f
-      end
-
-      ##
-      # Setter for height
-      #
-      # * *Args*    :
-      #   - +height+ -> Int or Float
-      #
-      def height=(height)
-        @height = height.to_f
-      end
-
-      ##
-      # Get self as an Array
-      #
-      # * *Returns* :
-      #   - <tt>[@width, @height]</tt>
-      #
-      def to_a
-        [@width, @height]
+        MKMapSizeMake(width, height)
       end
 
       ##
@@ -383,17 +305,7 @@ module MapKit
       #   - <tt>{:width => width, :height => height}</tt>
       #
       def to_h
-        {:width => @width, :height => @height}
-      end
-
-      ##
-      # Get self as a String
-      #
-      # * *Returns* :
-      #   - <tt>"{:width => width, :height => height}"</tt>
-      #
-      def to_s
-        to_h.to_s
+        {:width => width, :height => height}
       end
     end
 

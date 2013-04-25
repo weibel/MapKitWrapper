@@ -7,80 +7,16 @@ module MapKit
   #
   module ZoomLevel
     include Math
-
-    ##
-    # Total map width in pixels
-    #
-    MERCATOR_OFFSET = 268435456.0
-
-    ##
-    # Map radius in pixels
-    #
-    MERCATOR_RADIUS = MERCATOR_OFFSET / PI
+    include CoreLocation::DataTypes
+    include MapKit::DataTypes
 
     ##
     # Map conversion methods
     #
     module ClassMethods
       include Math
-
-      ##
-      # Convert longitude to pixel space x
-      #
-      # * *Args*    :
-      #   - +longitude+ -> Int or Float
-      #
-      # * *Returns* :
-      #   - Pixel space x as Int
-      #
-      def longitude_to_pixel_space_x(longitude)
-        (MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * PI / 180.0).round
-      end
-
-      ##
-      # Convert latitude to pixel space y
-      #
-      # * *Args*    :
-      #   - +latitude+ -> Int or Float
-      #
-      # * *Returns* :
-      #   - Pixel space y as Int
-      #
-      def latitude_to_pixel_space_y(latitude)
-        if latitude == 90.0
-          0
-        elsif latitude == -90.0
-          MERCATOR_OFFSET * 2
-        else
-          (MERCATOR_OFFSET - MERCATOR_RADIUS * log((1 + sin(latitude * PI / 180.0)) / (1 - sin(latitude * PI / 180.0))) / 2.0).round
-        end
-      end
-
-      ##
-      # Convert pixel space x to longitude
-      #
-      # * *Args*    :
-      #   - +pixel_x+ -> Int
-      #
-      # * *Returns* :
-      #   - Longitude as float
-      #
-      def pixel_space_x_to_longitude(pixel_x)
-        ((pixel_x.round - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / PI
-      end
-
-      ##
-      # Convert pixel space y to latitude
-      #
-      # * *Args*    :
-      #   - +pixel_y+ -> Int
-      #
-      # * *Returns* :
-      #   - Latitude as float
-      #
-      def pixel_space_y_to_latitude(pixel_y)
-        (PI / 2.0 - 2.0 * atan(exp((pixel_y.round - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / PI
-      end
+      include CoreLocation::DataTypes
+      include MapKit::DataTypes
 
       ##
       # Get the coordiante span for the given zoom level
@@ -94,41 +30,27 @@ module MapKit
       #   - Span as MKCoordinateSpan
       #
       def coordinate_span_with_map_view(map_view, center_coordinate, zoom_level)
-        # convert center coordiate to pixel space
-        center_pixel_x = self.longitude_to_pixel_space_x(center_coordinate.longitude)
-        center_pixel_y = self.latitude_to_pixel_space_y(center_coordinate.latitude)
-
         # determine the scale value from the zoom level
         zoom_exponent = 20 - zoom_level
         zoom_scale = 2 ** zoom_exponent
 
         # scale the map’s size in pixel space
-        map_size_in_pixels = map_view.bounds.size
-        scaled_map_width = map_size_in_pixels.width * zoom_scale
-        scaled_map_height = map_size_in_pixels.height * zoom_scale
+        scaled_map_size = MapSize.new(map_view.bounds.size) * zoom_scale
 
         # figure out the position of the top-left pixel
-        top_left_pixel_x = center_pixel_x - (scaled_map_width / 2)
-        top_left_pixel_y = center_pixel_y - (scaled_map_height / 2)
+        top_left_pixel = LocationCoordinate.new(center_coordinate).to_pixel_space - (scaled_map_size / 2)
 
-        # find delta between left and right longitudes
-        min_lng = self.pixel_space_x_to_longitude(top_left_pixel_x)
-        max_lng = self.pixel_space_x_to_longitude(top_left_pixel_x + scaled_map_width)
-        longitude_delta = max_lng - min_lng
-
-        # find delta between top and bottom latitudes
-        min_lat = self.pixel_space_y_to_latitude(top_left_pixel_y)
-        max_lat = self.pixel_space_y_to_latitude(top_left_pixel_y + scaled_map_height)
-        latitude_delta = -1 * (max_lat - min_lat)
+        # convert center coordinates to location space and find the span between them
+        top_left_coordinate = top_left_pixel.to_location_space
+        bottom_right_coordinate = (top_left_pixel + scaled_map_size).to_location_space
+        span = bottom_right_coordinate.span_to(top_left_coordinate)
 
         # create and return the lat/lng span
-        MKCoordinateSpanMake(latitude_delta, longitude_delta)
+        CoordinateSpan.new(span.y, span.x).api
       end
 
       ##
       # Get the coordiante region for the given zoom level
-      #
-      # This would involve wrapping the map from top to bottom, something that a Mercator projection just cannot do.
       #
       # * *Args*    :
       #   - +map_view+ -> A MKMapView
@@ -139,58 +61,45 @@ module MapKit
       #   - Region as MKCoordinateRegion
       #
       def coordinate_region_with_map_view(map_view, center_coordinate, zoom_level)
-
-        # clamp lat/long values to appropriate ranges
-        center_coordinate.latitude = [[-90.0, center_coordinate.latitude].max, 90.0].min
-        center_coordinate.longitude = center_coordinate.longitude % 180.0
-
-        # convert center coordiate to pixel space
-        center_pixel_x = self.longitude_to_pixel_space_x(center_coordinate.longitude)
-        center_pixel_y = self.latitude_to_pixel_space_y(center_coordinate.latitude)
+        center_coordinate = LocationCoordinate.new(center_coordinate).mercator_limit
+        center_pixel = center_coordinate.to_pixel_space
 
         # determine the scale value from the zoom level
         zoom_exponent = 20 - zoom_level
         zoom_scale = 2 ** zoom_exponent
 
         # scale the map’s size in pixel space
-        map_size_in_pixels = map_view.bounds.size
-        scaled_map_width = map_size_in_pixels.width * zoom_scale
-        scaled_map_height = map_size_in_pixels.height * zoom_scale
+        scaled_map_size = (MapSize.new(map_view.bounds.size) * zoom_scale)
 
-        # figure out the position of the left pixel
-        top_left_pixel_x = center_pixel_x - (scaled_map_width / 2)
-
-        # find delta between left and right longitudes
-        min_lng = self.pixel_space_x_to_longitude(top_left_pixel_x)
-        max_lng = self.pixel_space_x_to_longitude(top_left_pixel_x + scaled_map_width)
-        longitude_delta = max_lng - min_lng
+        # figure out the position of the corner pixels
+        top_left_pixel = center_pixel - (scaled_map_size / 2)
+        bottom_right_pixel = top_left_pixel + scaled_map_size
 
         # if we’re at a pole then calculate the distance from the pole towards the equator
         # as MKMapView doesn’t like drawing boxes over the poles
-        top_pixel_y = center_pixel_y - (scaled_map_height / 2)
-        bottom_pixel_y = center_pixel_y + (scaled_map_height / 2)
         adjusted_center_point = false
-        if top_pixel_y > MERCATOR_OFFSET * 2
-          top_pixel_y = center_pixel_y - scaled_map_height
-          bottom_pixel_y = MERCATOR_OFFSET * 2
+        if top_left_pixel.y > BaseDataTypes::Vector::MERCATOR_OFFSET * 2
+          top_left_pixel.y = center_pixel.y - scaled_map_size.height
+          bottom_right_pixel.y = BaseDataTypes::Vector::MERCATOR_OFFSET * 2
           adjusted_center_point = true
         end
 
-        # find delta between top and bottom latitudes
-        min_lat = self.pixel_space_y_to_latitude(top_pixel_y)
-        max_lat = self.pixel_space_y_to_latitude(bottom_pixel_y)
-        latitude_delta = -1 * (max_lat - min_lat)
+        # find delta between left and right longitudes
+        # convert center coordinates to location space and find the span between them
+        top_left_coordinate = top_left_pixel.to_location_space
+        bottom_right_coordinate = bottom_right_pixel.to_location_space
+        span = bottom_right_coordinate.span_to(top_left_coordinate)
 
         # create and return the lat/lng span
-        span = MKCoordinateSpanMake(latitude_delta, longitude_delta)
-        region = MKCoordinateRegionMake(center_coordinate, span)
+        span = CoordinateSpan.new(span.y, span.x)
+
         # once again, MKMapView doesn’t like drawing boxes over the poles
         # so adjust the center coordinate to the center of the resulting region
         if adjusted_center_point
-          region.center.latitude = self.pixel_space_y_to_latitude((bottom_pixel_y + top_pixel_y) / 2.0)
+          center_coordinate.latitude = (top_left_coordinate + (span / 2)).latitude
         end
 
-        region
+        CoordinateRegion.new(center_coordinate, span).api
       end
     end
 
@@ -215,10 +124,10 @@ module MapKit
 
       # use the zoom level to compute the region
       span = self.class.coordinate_span_with_map_view(self, center_coordinate, zoom_level)
-      region = MKCoordinateRegionMake(center_coordinate, span)
+      region = CoordinateRegion.new(center_coordinate, span)
 
       # set the region like normal
-      self.setRegion(region, animated: animated)
+      self.setRegion(region.api, animated: animated)
     end
 
     ##
@@ -231,8 +140,8 @@ module MapKit
     #   - +animated+ -> bool
     #
     def set_map_lat_lon(latitude, longitude, zoom_level, animated = false)
-      coordinates = CLLocationCoordinate2DMake(latitude, longitude)
-      set_center_coordinates(coordinates, zoom_level, animated)
+      coordinate = LocationCoordinate.new(latitude, longitude)
+      set_center_coordinates(coordinate, zoom_level, animated)
     end
 
     ##
@@ -242,16 +151,16 @@ module MapKit
     #   - Zoom level as a Float
     #
     def zoom_level
-      region = self.region.api
-      center_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude)
-      top_left_pixel_x = self.class.longitude_to_pixel_space_x(region.center.longitude - region.span.longitudeDelta / 2)
+      region = self.region
+      center_pixel = region.center.to_pixel_space
+      top_left_pixel = (region.center - (region.span / 2)).to_pixel_space
 
-      scaled_map_width = (center_pixel_x - top_left_pixel_x) * 2
-      map_size_in_pixels = self.bounds.size
+      scaled_map_width = (center_pixel.x - top_left_pixel.x) * 2
+      map_size_in_pixels = MapSize.new(self.bounds.size)
+
       zoom_scale = scaled_map_width / map_size_in_pixels.width
       zoom_exponent = log(zoom_scale) / log(2)
-      zoom_level = 20 - zoom_exponent
-      zoom_level
+      20 - zoom_exponent
     end
 
     ##
@@ -262,7 +171,7 @@ module MapKit
     #   - +animated+ -> Bool
     #
     def set_zoom_level(zoom_level, animated = false)
-      set_center_coordinates(self.region.api.center, zoom_level, animated)
+      set_center_coordinates(self.region.center, zoom_level, animated)
     end
 
   end

@@ -92,6 +92,16 @@ describe 'MapKitDataTypes' do
       @array = [o_1, o_2, o_3, o_4]
     end
 
+    it 'should return pixel_space_x_to_longitude' do
+      MapKit::DataTypes::MapPoint.pixel_space_x_to_longitude(313174699).should.equal 29.9999923706055 # 30
+    end
+
+    it 'should return pixel_space_y_to_latitude' do
+      MapKit::DataTypes::MapPoint.pixel_space_y_to_latitude(0).should.equal 85.0511169433594 # 90
+      MapKit::DataTypes::MapPoint.pixel_space_y_to_latitude(536870912).should.equal -85.0511169433594 # -90
+      MapKit::DataTypes::MapPoint.pixel_space_y_to_latitude(268435456).should.equal 0
+    end
+
     it 'should return the x' do
       @array.each do |o|
         o.x.should.equal 5
@@ -101,6 +111,12 @@ describe 'MapKitDataTypes' do
     it 'should return the y' do
       @array.each do |o|
         o.y.should.equal 8
+      end
+    end
+
+    it 'should be multiplied by a scalar' do
+      @array.each do |o|
+        (o * 3).nil?.should.equal false
       end
     end
 
