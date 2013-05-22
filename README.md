@@ -5,6 +5,8 @@ This is a MapKit wrapper for RubyMotion. It's purpose is to make dealing with Ma
 
 MapKitWrapper is work in progress. Right now there are wrappers for the Map Kit Data Types and the Core Location Data Types. Those will save you a lot of typing.
 
+The full documentation is here http://rubydoc.info/gems/map-kit-wrapper/0.0.5/frames
+
 ## Installation
 ```ruby
 gem install map-kit-wrapper
