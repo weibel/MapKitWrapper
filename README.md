@@ -1,3 +1,6 @@
+> This repository is no longer being actively maintained.<br>
+> Kasper
+
 MapKitWrapper
 =============
 
